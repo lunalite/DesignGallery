@@ -8,19 +8,19 @@
 
 
 <url>
-  <loc>http://ui-collection.appspot.com/</loc>
-  <lastmod>2018-04-11T09:47:54+00:00</lastmod>
+  <loc>https://mobile-ui-collection.herokuapp.com/</loc>
+  <lastmod>2018-04-13T16:49:50+00:00</lastmod>
   <priority>1.00</priority>
 </url>
 <url>
-  <loc>http://ui-collection.appspot.com/search</loc>
-  <lastmod>2018-04-11T09:47:54+00:00</lastmod>
+  <loc>https://mobile-ui-collection.herokuapp.com/search</loc>
+  <lastmod>2018-04-13T16:49:50+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>http://ui-collection.appspot.com/about</loc>
-  <lastmod>2018-04-11T09:47:54+00:00</lastmod>
-  <priority>0.64</priority>
+  <loc>https://mobile-ui-collection.herokuapp.com/about</loc>
+  <lastmod>2018-04-13T16:49:50+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 
 
