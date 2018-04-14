@@ -11,6 +11,7 @@ mongoose.connect(mongoDB);
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 require('./models/widget');
+require('./models/count');
 
 var indexRouter = require('./routes/index');
 var searchRouter = require('./routes/search');

@@ -48,8 +48,8 @@
                     <a class="nav-link" href="/">Home</a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link" href="#">Search
-                        <span class="sr-only">(current)</span>
+                    <a class="nav-link" href="/search">Search
+                        <span class="sr-only">(query.page)</span>
                     </a>
                 </li>
                 <li class="nav-item">
@@ -68,16 +68,19 @@
 <div class="container">
     <h2 class="my-4 text-center text-lg-left">Widget Search</h2>
     <hr/>
-    <form method="get" id="myform" action="search">
+    <form name="search" method="get" id="myform" action="/search" onsubmit="return searchValidation()">
         Find widgets with the following properties:<br><br>
         <h4> Type of widget </h4>
         <select class="custom-select" id="btnType" name="btnType">
             <% if (!btnTypeArr.includes(query.btnType)) { %>
-            <option disabled selected value> -- select an option --</option>
+            <option selected value="All">All</option>
             <% } else { %>
-            <option disabled value> -- select an option --</option>
+            <option value="All">All</option>
             <% }
             for (var i = 0; i < btnTypeArr.length; i++) {
+                if (btnTypeArr[i] === 'All') {
+                    continue;
+                }
             if (query.btnType === btnTypeArr[i]) { %>
             <option selected> <%= btnTypeArr[i] %></option>
             <% }else { %>
@@ -87,20 +90,23 @@
         </select><br><br>
         <!-- <h4> Color </h4> -->
         <!-- <h4> Application Category </h4> -->
-        <input type="hidden" name="page" value="1">
+        <input type="hidden" name="page" value="<% if (query.page) { %><%= query.page %><% } else { %>1<% } %>">
 
         <h4> Sort By </h4>
         <select class="custom-select" id="sortType" name="sortType">
             <% if (!((query.sortType) in sortTypeDict)) { %>
-            <option disabled selected value> -- select an option --</option>
+            <option selected value="appDownloads"> <%= sortTypeDict['appDownloads'] %></option>
             <% } else { %>
-            <option disabled value> -- select an option --</option>
-            <% }
-                    for (const [key, value] of Object.entries(sortTypeDict)) {
+            <option value="appDownloads"> <%= sortTypeDict['appDownloads'] %></option>
+            <% } for (const [key, value] of Object.entries(sortTypeDict)) {
+                if (key === 'appDownloads') {
+                    continue;
+                }
+
             if (query.sortType === key) { %>
-            <option selected value="<%= key %>"> <%= value %> </option>
+            <option selected value="<%= key %>"><%= value %></option>
             <% }else { %>
-            <option value="<%= key %>"> <%= value %> </option>
+            <option value="<%= key %>"><%= value %></option>
             <% }
             } %>
         </select><br><br>
@@ -118,7 +124,7 @@
             <div class="image--basic" style="height:100px">
                 <a href="#expand-jump-<%= i %>">
                     <img id="expand-jump-<%= i %>" class="basic__img"
-                         src="https://storage.googleapis.com/ui-collection-gcs/widgets/<%= query.btnType + '/' + widgets[i].name + '.png' %>"
+                         src="https://storage.googleapis.com/ui-collection-gcs/widgets/<%= widgets[i].widget_class + '/' + widgets[i].name + '.png' %>"
                          style="max-height:100px;"/>
                 </a>
             </div>
@@ -126,12 +132,26 @@
             <div class="image--expand">
                 <div class="modal-body row">
                     <div class="col-md-5">
+                        <% var left = widgets[i].coordinates['from'][0]; %>
+                        <% var top = widgets[i].coordinates['from'][1]; %>
+                        <% var width = widgets[i].dimensions['width']; %>
+                        <% var height = widgets[i].dimensions['height']; %>
+                        <div style="
+                                position:absolute;
+                                background:red;
+                                left:<%= left/2+15 %>px;
+                                top:<%= top/2 %>px;
+                                width:<%= width/2 %>px;
+                                height:<%= height/2 %>px;
+                                opacity:0.5;
+                                ">
+                        </div>
                         <img class="image--large"
-                             src="https://storage.googleapis.com/ui-collection-gcs/widgets/<%= query.btnType + '/' + widgets[i].name + '.png' %>"
-                             style="max-height:450px"/>
-                        <p align="center" style="color:grey"><%= btnSize %></p>
+                                <% var screenSrc = widgets[i].src.split('/') %>
+                             src="https://storage.googleapis.com/ui-collection-gcs/<%= screenSrc[3] + '/' + screenSrc[4] + '/' + screenSrc[7] + '.png' %>"
+                             style="max-height:640px"/>
                     </div>
-                    <div class="col-md-5">
+                    <div class="col-md-5 align-self-center">
                         <table cellpadding="0" cellspacing="0" border="0" class="app-detail">
                             <tr>
                                 <td><b>Application: </b></td>
@@ -160,6 +180,10 @@
                                 <td>[<%= widgets[i].coordinates['from'] %>] [<%= widgets[i].coordinates['to'] %>]</td>
                             </tr>
                             <tr>
+                                <td><b>Size:&emsp;</b></td>
+                                <td><%= btnSize %></td>
+                            </tr>
+                            <tr>
                                 <td><b>Color: </b></td>
                                 <td> <%= widgets[i].color %></td>
                             </tr>
@@ -179,41 +203,42 @@
     </section>
 
     <!-- pagination -->
-    <% if (query.hasOwnProperty('btnType')) { %>
+    <% if (pages > 0) { %>
     <div class="container">
         <nav aria-label="Page navigation example">
             <ul class="pagination justify-content-center">
                 <% if (query.page === '1') { %>
-                <li class="page-item disabled">
-                    <a class="page-link" href="#" tabindex="-1">Previous</a>
+                <li class="page-item disabled"><a class="page-link">First</a></li>
+                <% } else { %>
+                <li class="page-item"><a class="page-link" href="<%= url.replace(/page=\d+/, 'page=1'); %>">First</a>
                 </li>
-                <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="?btnType=<%= query.btnType %>&page=2">2</a></li>
-                <li class="page-item"><a class="page-link" href="?btnType=<%= query.btnType %>&page=3">3</a></li>
-                <li class="page-item">
-                    <a class="page-link"
-                       href="?btnType=<%= query.btnType %>&page=<%= parseInt(query.page) + 1 %>">Next</a>
-                </li>
-                <% } else if (!isNaN(query.page)) { %>
-                <li class="page-item">
-                    <a class="page-link" href="?btnType=<%= query.btnType %>&page=<%= parseInt(query.page) - 1 %>">Previous</a>
-                </li>
+                <% } %>
+                <% i = (Number(query.page) > 5 ? Number(query.page) - 4 : 1) %>
+                <% if (i !== 1) { %>
+                <li class="page-item disabled"><a class="page-link">...</a></li>
+                <% } %>
+                <% for (; i <= (Number(query.page) + 4) && i <= pages; i++) { %>
+                <% if (i == query.page) { %>
+                <li class="page-item active"><a class="page-link"><%= i %></a></li>
+                <% } else { %>
                 <li class="page-item"><a class="page-link"
-                                         href="?btnType=<%= query.btnType %>&page=<%= parseInt(query.page) - 1 %>"><%= parseInt(query.page) - 1 %></a>
-                </li>
-                <li class="page-item active"><a class="page-link" href="#"><%= query.page %></a></li>
+                                         href="<%= url.replace(/page=\d+/, 'page=' + i); %>"><%= i %></a></li>
+                <% } %>
+                <% if (i == Number(query.page) + 4 && i < pages) { %>
+                <li class="page-item disabled"><a class="page-link">...</a></li>
+                <% } %>
+                <% } %>
+                <% if (query.page == pages) { %>
+                <li class="page-item disabled"><a class="page-link">Last</a></li>
+                <% } else { %>
                 <li class="page-item"><a class="page-link"
-                                         href="?btnType=<%= query.btnType %>&page=<%= parseInt(query.page) + 1 %>"><%= parseInt(query.page) + 1 %></a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link"
-                       href="?btnType=<%= query.btnType %>&page=<%= parseInt(query.page) + 1 %>">Next</a>
-                </li>
+                                         href="<%= url.replace(/page=\d+/, 'page=' + pages); %>">Last</a></li>
                 <% } %>
             </ul>
         </nav>
     </div>
     <% } %>
+
 </div>
 <!-- /.container -->
 <!-- footer -->
@@ -249,6 +274,13 @@
 
         $thisCell.removeClass('is-expanded').addClass('is-collapsed');
     });
+
+    function searchValidation() {
+        console.log(document.forms['search']);
+
+    }
+
+
 </script>
 </body>
 </html>
