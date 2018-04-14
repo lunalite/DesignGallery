@@ -91,7 +91,7 @@
 
         <h4> Sort By </h4>
         <select class="custom-select" id="sortType" name="sortType">
-            <% if ((query.sortType) in sortTypeDict) { %>
+            <% if (!((query.sortType) in sortTypeDict)) { %>
             <option disabled selected value> -- select an option --</option>
             <% } else { %>
             <option disabled value> -- select an option --</option>
