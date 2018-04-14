@@ -18,8 +18,18 @@ const displayPerPage = 30;
 router.get('/', function (req, res, next) {
     if (!Util.isPositiveInteger(req.query.page) && req.query.page) {
         next(new Error('Page is not a positive integer'));
+    } else if (!req.query.hasOwnProperty('sortType') || !req.query.hasOwnProperty('btnType')) {
+        res.render('search', {
+            title: 'Mobile UI Gallery - Search for widgets',
+            url: req.originalUrl,
+            btnTypeArr: _btnTypeArr,
+            sortTypeDict: _sortTypeDict,
+            query: req.query,
+            widgets: {},
+            pages: 0
+        });
+        console.log('error');
     } else {
-
         let findObj;
         if (req.query.btnType === 'All') {
             findObj = {};
@@ -34,6 +44,8 @@ router.get('/', function (req, res, next) {
             case 'appAlpbAsc':
                 _sortType = {application_name: 1};
                 break;
+            default:
+                break
         }
 
         let cQuery = function (callback) {
@@ -65,19 +77,31 @@ router.get('/', function (req, res, next) {
         };
 
         async.parallel([cQuery, rQuery], function (err, results) {
-            console.log(results[0][0]['count']);
+            let max_pages = Math.ceil(results[0][0]['count'] / displayPerPage);
             if (err) {
                 return next(err);
+            } else if (req.query.page > max_pages) {
+                res.render('search', {
+                    title: 'Mobile UI Gallery - Search for widgets',
+                    url: req.originalUrl,
+                    btnTypeArr: _btnTypeArr,
+                    sortTypeDict: _sortTypeDict,
+                    query: req.query,
+                    widgets: {},
+                    pages: 0
+                });
+                console.log('error, beyond pages');
+            } else {
+                res.render('search', {
+                    title: 'Mobile UI Gallery - Search for widgets',
+                    url: req.originalUrl,
+                    btnTypeArr: _btnTypeArr,
+                    sortTypeDict: _sortTypeDict,
+                    query: req.query,
+                    widgets: results[1],
+                    pages: max_pages
+                });
             }
-            res.render('search', {
-                title: 'Mobile UI Gallery - Search for widgets',
-                url: req.originalUrl,
-                btnTypeArr: _btnTypeArr,
-                sortTypeDict: _sortTypeDict,
-                query: req.query,
-                widgets: results[1],
-                pages: Math.ceil(results[0][0]['count'] / displayPerPage)
-            });
         });
 
     }
