@@ -13,11 +13,12 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 require('./models/widget');
 require('./models/count');
 
-var indexRouter = require('./routes/index');
-var searchRouter = require('./routes/search');
-var aboutRouter = require('./routes/about');
+const indexRouter = require('./routes/index');
+const searchRouter = require('./routes/search');
+const aboutRouter = require('./routes/about');
+const contactRouter = require('./routes/contact');
 
-var app = express();
+const app = express();
 
 
 // view engine setup
@@ -33,6 +34,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/search', searchRouter);
 app.use('/about', aboutRouter);
+app.use('/contact', contactRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

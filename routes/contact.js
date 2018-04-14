@@ -3,7 +3,7 @@ const router = express.Router();
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
-    res.render('about', {title: 'Mobile UI Gallery - About'});
+    res.render('contact', {title: 'Mobile UI Gallery - Contact us'});
 });
 
 module.exports = router;
