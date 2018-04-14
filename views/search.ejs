@@ -22,7 +22,11 @@
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-117332758-2"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+
         gtag('js', new Date());
 
         gtag('config', 'UA-117332758-2');
@@ -68,12 +72,11 @@
         Find widgets with the following properties:<br><br>
         <h4> Type of widget </h4>
         <select class="custom-select" id="btnType" name="btnType">
-            <% if (!query.hasOwnProperty('btnType')) { %>
+            <% if (!btnTypeArr.includes(query.btnType)) { %>
             <option disabled selected value> -- select an option --</option>
             <% } else { %>
             <option disabled value> -- select an option --</option>
             <% }
-            var btnTypeArr = ["CheckBox", "Chronometer", "CompoundButton", "EditText", "ImageButton", "ProgressBar", "RadioButton", "RatingBar", "SeekBar", "Spinner", "Switch", "ToggleButton", "View"];
             for (var i = 0; i < btnTypeArr.length; i++) {
             if (query.btnType === btnTypeArr[i]) { %>
             <option selected> <%= btnTypeArr[i] %></option>
@@ -88,17 +91,16 @@
 
         <h4> Sort By </h4>
         <select class="custom-select" id="sortType" name="sortType">
-            <% if (!query.hasOwnProperty('sortType')) { %>
+            <% if ((query.sortType) in sortTypeDict) { %>
             <option disabled selected value> -- select an option --</option>
             <% } else { %>
             <option disabled value> -- select an option --</option>
             <% }
-            var sortTypeArr = ["appDownloads", "appAlpbAsc"];
-            for (var i = 0; i < sortTypeArr.length; i++) {
-            if (query.sortType === sortTypeArr[i]) { %>
-            <option selected> <%= sortTypeArr[i] %></option>
+                    for (const [key, value] of Object.entries(sortTypeDict)) {
+            if (query.sortType === key) { %>
+            <option selected value="<%= key %>"> <%= value %> </option>
             <% }else { %>
-            <option> <%= sortTypeArr[i] %></option>
+            <option value="<%= key %>"> <%= value %> </option>
             <% }
             } %>
         </select><br><br>
@@ -110,51 +112,61 @@
     <hr/>
 
     <section class="image-grid">
-        <% for(i = 0; i < widgets.length; i ++) {
-        var btnSize = widgets[i].dimensions['width'] + 'x' + widgets[i].dimensions['height'];%>
+        <% for(i = 0; i < widgets.length; i++) {
+            var btnSize = widgets[i].dimensions['width'] + 'x' + widgets[i].dimensions['height']; %>
         <article class="image__cell is-collapsed">
             <div class="image--basic" style="height:100px">
-                <a href="#expand-jump-<%=i%>">
-                    <img id="expand-jump-<%=i%>" class="basic__img" src="https://storage.googleapis.com/ui-collection-gcs/widgets/<%=query.btnType + '/' + widgets[i].name +'.png'%>" style="max-height:100px;" />
+                <a href="#expand-jump-<%= i %>">
+                    <img id="expand-jump-<%= i %>" class="basic__img"
+                         src="https://storage.googleapis.com/ui-collection-gcs/widgets/<%= query.btnType + '/' + widgets[i].name + '.png' %>"
+                         style="max-height:100px;"/>
                 </a>
             </div>
             <div class="arrow--up"></div>
             <div class="image--expand">
                 <div class="modal-body row">
                     <div class="col-md-5">
-                        <img class="image--large" src="https://storage.googleapis.com/ui-collection-gcs/widgets/<%=query.btnType + '/' + widgets[i].name +'.png'%>" style="max-height:450px"/>
-                        <p align="center" style="color:grey"><%=btnSize%></p>
+                        <img class="image--large"
+                             src="https://storage.googleapis.com/ui-collection-gcs/widgets/<%= query.btnType + '/' + widgets[i].name + '.png' %>"
+                             style="max-height:450px"/>
+                        <p align="center" style="color:grey"><%= btnSize %></p>
                     </div>
                     <div class="col-md-5">
-                        <table cellpadding="0" cellspacing="0" border="0">
-                        <tr>
-                            <td><b>Application: </b></td>
-                            <td><a href="<%=widgets[i].url%>"><%=widgets[i].application_name%></a></td>
-                        </tr>
-                        <tr>
-                            <td><b>Package: </b></td>
-                            <td><%=widgets[i].package_name%></td>
-                        </tr>
-                        <tr>
-                            <td><b>Text: </b></td>
-                            <td><%=widgets[i].text%></td>
-                        </tr>
-                        <tr>
-                            <td><b>Class: </b></td>
-                            <td><%=widgets[i].widget_class%></td>
-                        </tr>
-                        <tr>
-                            <td><b>Coordinates:&emsp;</b></td>
-                            <td>[<%=widgets[i].coordinates['from']%>] [<%=widgets[i].coordinates['to']%>]</td>
-                        </tr>
-                        <tr>
-                            <td><b>Color: </b></td>
-                            <td> <%=widgets[i].color%></td>
-                        </tr>
-                        <tr>
-                            <td><b>Downloads:</b></td>
-                            <td><%=widgets[i].downloads%></td>
-                        </tr>
+                        <table cellpadding="0" cellspacing="0" border="0" class="app-detail">
+                            <tr>
+                                <td><b>Application: </b></td>
+                                <td><a href="<%= widgets[i].url %>">
+                                        <% if (!widgets[i].application_name) { %>
+                                        Non-ascii
+                                        <% } else { %>
+                                        <%= widgets[i].application_name %>
+                                        <% } %>
+                                    </a></td>
+                            </tr>
+                            <tr>
+                                <td><b>Package: </b></td>
+                                <td><%= widgets[i].package_name %></td>
+                            </tr>
+                            <tr>
+                                <td><b>Text: </b></td>
+                                <td><%= widgets[i].text %></td>
+                            </tr>
+                            <tr>
+                                <td><b>Class: </b></td>
+                                <td><%= widgets[i].widget_class %></td>
+                            </tr>
+                            <tr>
+                                <td><b>Coordinates:&emsp;</b></td>
+                                <td>[<%= widgets[i].coordinates['from'] %>] [<%= widgets[i].coordinates['to'] %>]</td>
+                            </tr>
+                            <tr>
+                                <td><b>Color: </b></td>
+                                <td> <%= widgets[i].color %></td>
+                            </tr>
+                            <tr>
+                                <td><b>Downloads:</b></td>
+                                <td><%= widgets[i].downloads %></td>
+                            </tr>
                         </table>
                     </div>
                     <div>
@@ -164,13 +176,47 @@
             </div>
         </article>
         <% } %>
-
     </section>
 
-
+    <!-- pagination -->
+    <% if (query.hasOwnProperty('btnType')) { %>
+    <div class="container">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                <% if (query.page === '1') { %>
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1">Previous</a>
+                </li>
+                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                <li class="page-item"><a class="page-link" href="?btnType=<%= query.btnType %>&page=2">2</a></li>
+                <li class="page-item"><a class="page-link" href="?btnType=<%= query.btnType %>&page=3">3</a></li>
+                <li class="page-item">
+                    <a class="page-link"
+                       href="?btnType=<%= query.btnType %>&page=<%= parseInt(query.page) + 1 %>">Next</a>
+                </li>
+                <% } else if (!isNaN(query.page)) { %>
+                <li class="page-item">
+                    <a class="page-link" href="?btnType=<%= query.btnType %>&page=<%= parseInt(query.page) - 1 %>">Previous</a>
+                </li>
+                <li class="page-item"><a class="page-link"
+                                         href="?btnType=<%= query.btnType %>&page=<%= parseInt(query.page) - 1 %>"><%= parseInt(query.page) - 1 %></a>
+                </li>
+                <li class="page-item active"><a class="page-link" href="#"><%= query.page %></a></li>
+                <li class="page-item"><a class="page-link"
+                                         href="?btnType=<%= query.btnType %>&page=<%= parseInt(query.page) + 1 %>"><%= parseInt(query.page) + 1 %></a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link"
+                       href="?btnType=<%= query.btnType %>&page=<%= parseInt(query.page) + 1 %>">Next</a>
+                </li>
+                <% } %>
+            </ul>
+        </nav>
+    </div>
+    <% } %>
 </div>
 <!-- /.container -->
-
+<!-- footer -->
 <footer class="py-5 bg-dark">
     <div class="container">
         <p class="m-0 text-center text-white">Copyright &copy; Mobile UI Gallery 2018</p>
@@ -184,25 +230,25 @@
         crossorigin="anonymous"></script>
 
 <script>
-var $cell = $('.image__cell');
+    var $cell = $('.image__cell');
 
-$cell.find('.image--basic').click(function () {
-    var $thisCell = $(this).closest('.image__cell');
+    $cell.find('.image--basic').click(function () {
+        var $thisCell = $(this).closest('.image__cell');
 
-    if ($thisCell.hasClass('is-collapsed')) {
-        $cell.not($thisCell).removeClass('is-expanded').addClass('is-collapsed');
-        $thisCell.removeClass('is-collapsed').addClass('is-expanded');
-    } else {
+        if ($thisCell.hasClass('is-collapsed')) {
+            $cell.not($thisCell).removeClass('is-expanded').addClass('is-collapsed');
+            $thisCell.removeClass('is-collapsed').addClass('is-expanded');
+        } else {
+            $thisCell.removeClass('is-expanded').addClass('is-collapsed');
+        }
+    });
+
+    $cell.find('.expand__close').click(function () {
+
+        var $thisCell = $(this).closest('.image__cell');
+
         $thisCell.removeClass('is-expanded').addClass('is-collapsed');
-    }
-});
-
-$cell.find('.expand__close').click(function () {
-
-    var $thisCell = $(this).closest('.image__cell');
-
-    $thisCell.removeClass('is-expanded').addClass('is-collapsed');
-});
+    });
 </script>
 </body>
 </html>
