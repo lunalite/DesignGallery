@@ -5,36 +5,36 @@
         xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
             http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
     <url>
-        <loc>https://mobile-ui-collection.herokuapp.com/</loc>
+        <loc>https://mui-collection.herokuapp.com/</loc>
         <lastmod>2018-04-13T16:49:50+00:00</lastmod>
         <priority>1.00</priority>
     </url>
     <url>
-        <loc>https://mobile-ui-collection.herokuapp.com/search</loc>
+        <loc>https://mui-collection.herokuapp.com/search</loc>
         <lastmod>2018-04-13T16:49:50+00:00</lastmod>
         <priority>0.80</priority>
     </url>
     <url>
-        <loc>https://mobile-ui-collection.herokuapp.com/about</loc>
+        <loc>https://mui-collection.herokuapp.com/about</loc>
         <lastmod>2018-04-13T16:49:50+00:00</lastmod>
         <priority>0.80</priority>
     </url>
     <url>
-        <loc>https://mobile-ui-collection.herokuapp.com/search?btnType=CheckBox&amp;page=1&amp;sortType=appDownloads
+        <loc>https://mui-collection.herokuapp.com/search?btnType=CheckBox&amp;page=1&amp;sortType=appDownloads
         </loc>
         <lastmod>2018-04-14</lastmod>
     </url>
     <url>
-        <loc>https://mobile-ui-collection.herokuapp.com/search?btnType=Chronometer&page=1&sortType=appAlpbAsc</loc>
+        <loc>https://mui-collection.herokuapp.com/search?btnType=Chronometer&page=1&sortType=appAlpbAsc</loc>
         <lastmod>2018-04-14</lastmod>
     </url>
     <url>
-        <loc>https://mobile-ui-collection.herokuapp.com/search?btnType=CompoundButton&page=2&sortType=appDownloads</loc>
+        <loc>https://mui-collection.herokuapp.com/search?btnType=CompoundButton&page=2&sortType=appDownloads</loc>
         <lastmod>2018-04-14</lastmod>
     </url>
 
     <url>
-        <loc>https://mobile-ui-collection.herokuapp.com/search?btnType=EditText&page=3&sortType=appAlpbAsc</loc>
+        <loc>https://mui-collection.herokuapp.com/search?btnType=EditText&page=3&sortType=appAlpbAsc</loc>
         <lastmod>2018-04-14</lastmod>
     </url>
 </urlset>
