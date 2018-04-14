@@ -21,7 +21,11 @@
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-117332758-2"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+
         gtag('js', new Date());
 
         gtag('config', 'UA-117332758-2');
@@ -32,7 +36,7 @@
 <!-- Navigation -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
     <div class="container">
-        <a class="navbar-brand" href="#">Mobile UI Gallery</a>
+        <a class="navbar-brand" href="/">Mobile UI Gallery</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
                 aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -40,8 +44,8 @@
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" href="#">Home
-                        <span class="sr-only">(current)</span>
+                    <a class="nav-link" href="/"">Home
+                    <span class="sr-only">(current)</span>
                     </a>
                 </li>
                 <li class="nav-item">
@@ -61,24 +65,105 @@
 <!-- Page Content -->
 <div class="container">
     <h2 class="my-4 text-center text-lg-left">A gallery made for Android developers</h2>
-    <button type="button" class="btn btn-link">Search</button>
+    <div>A collection of more than 30,000 widgets coming from different applications found on the Google Play Store. To
+        search for more widgets or particular classes, please click on the search button below:
+    </div>
+    <br>
+    <div class="text-center">
+        <button type="button" class="btn-lg btn-primary">Search</button>
+    </div>
+
+    <hr/>
 
     <section class="image-grid">
-        <div class="image__cell is-collapsed">
-            <div class="image--basic">
-                <a href="#expand-jump-1">
+
+        <% for(i = 0; i < widgets.length; i++) {
+            var btnSize = widgets[i].dimensions['width'] + 'x' + widgets[i].dimensions['height']; %>
+        <article class="image__cell is-collapsed">
+            <div class="image--basic" style="height:100px">
+                <a href="#expand-jump-<%= i %>">
+                    <img id="expand-jump-<%= i %>" class="basic__img"
+                         src="https://storage.googleapis.com/ui-collection-gcs/widgets/<%= widgets[i].widget_class + '/' + widgets[i].name + '.png' %>"
+                         style="max-height:100px;"/>
                 </a>
-                <div class="arrow--up"></div>
             </div>
+            <div class="arrow--up"></div>
             <div class="image--expand">
-                <a href="#close-jump-1" class="expand__close"></a>
+                <div class="modal-body row">
+                    <div class="col-md-5">
+                        <% var left = widgets[i].coordinates['from'][0]; %>
+                        <% var top = widgets[i].coordinates['from'][1]; %>
+                        <% var width = widgets[i].dimensions['width']; %>
+                        <% var height = widgets[i].dimensions['height']; %>
+                        <div id="highlight-box" style="
+                                position:absolute;
+                                background:red;
+                                left:<%= left %>px;
+                                top:<%= top %>px;
+                                width:<%= width %>px;
+                                height:<%= height %>px;
+                                opacity:0.5;
+                                ">
+                        </div>
+                        <img class="image--large"
+                                <% var screenSrc = widgets[i].src.split('/') %>
+                             src="https://storage.googleapis.com/ui-collection-gcs/<%= screenSrc[3] + '/' + screenSrc[4] + '/' + screenSrc[7] + '.png' %>"
+                             style="max-height:640px"/>
+                    </div>
+                    <div class="col-md-5 align-self-center">
+                        <table cellpadding="0" cellspacing="0" border="0" class="app-detail">
+                            <tr>
+                                <td><b>Application: </b></td>
+                                <td><a href="<%= widgets[i].url %>">
+                                        <% if (!widgets[i].application_name) { %>
+                                        Non-ascii
+                                        <% } else { %>
+                                        <%= widgets[i].application_name %>
+                                        <% } %>
+                                    </a></td>
+                            </tr>
+                            <tr>
+                                <td><b>Package: </b></td>
+                                <td><%= widgets[i].package_name %></td>
+                            </tr>
+                            <tr>
+                                <td><b>Text: </b></td>
+                                <td><%= widgets[i].text %></td>
+                            </tr>
+                            <tr>
+                                <td><b>Class: </b></td>
+                                <td><%= widgets[i].widget_class %></td>
+                            </tr>
+                            <tr>
+                                <td><b>Coordinates:&emsp;</b></td>
+                                <td>[<%= widgets[i].coordinates['from'] %>] [<%= widgets[i].coordinates['to'] %>]</td>
+                            </tr>
+                            <tr>
+                                <td><b>Size:&emsp;</b></td>
+                                <td><%= btnSize %></td>
+                            </tr>
+                            <tr>
+                                <td><b>Color: </b></td>
+                                <td> <%= widgets[i].color %></td>
+                            </tr>
+                            <tr>
+                                <td><b>Downloads:</b></td>
+                                <td><%= widgets[i].downloads %></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div>
+                        <a href="#close-jump-' + i + '" class="expand__close"></a>
+                    </div>
+                </div>
             </div>
-        </div>
+        </article>
+        <% } %>
     </section>
 
 </div>
 <!-- /.container -->
-
+<br>
 <footer class="py-5 bg-dark">
     <div class="container">
         <p class="m-0 text-center text-white">Copyright &copy; Mobile UI Gallery 2018</p>
