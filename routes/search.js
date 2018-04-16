@@ -28,7 +28,6 @@ router.get('/', function (req, res, next) {
             widgets: {},
             pages: 0
         });
-        console.log('error');
     } else {
         let findObj;
         if (req.query.btnType === 'All') {

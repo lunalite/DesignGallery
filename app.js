@@ -1,14 +1,14 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
 
 // mongoDB
-var mongoose = require('mongoose');
-var mongoDB = process.env.MLAB_API_LINK;
+const mongoose = require('mongoose');
+const mongoDB = process.env.MLAB_API_LINK;
 mongoose.connect(mongoDB);
-var db = mongoose.connection;
+const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 require('./models/widget');
 require('./models/count');
