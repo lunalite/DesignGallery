@@ -13,6 +13,7 @@ const _sortTypeDict = {
     appAlpbAsc: "Descending Alphabetical Order"
 };
 const _colArr = ["All", "Red", "Orange", "Yellow", "Green", "Blue", "Purple", "Cyan", "Black", "White", "Pink", "Gray", "Brown", "Magenta"];
+const _catArr = ["All", "EDUCATION", "LIFESTYLE", "ENTERTAINMENT", "MUSIC_AND_AUDIO", "TOOLS", "PERSONALIZATION", "TRAVEL_AND_LOCAL", "NEWS_AND_MAGAZINES", "BOOKS_AND_REFERENCE", "BUSINESS", "FINANCE", "GAME_CASUAL", "SPORTS", "GAME_PUZZLE", "PRODUCTIVITY", "PHOTOGRAPHY", "HEALTH_AND_FITNESS", "TRANSPORTATION", "COMMUNICATION", "GAME_EDUCATIONAL", "SOCIAL", "MEDIA_AND_VIDEO", "SHOPPING", "GAME_ARCADE", "GAME_SIMULATION", "GAME_ACTION", "MEDICAL", "GAME_CARD", "WEATHER", "GAME_RACING", "GAME_BOARD", "GAME_SPORTS", "GAME_CASINO", "GAME_WORD", "GAME_TRIVIA", "GAME_ADVENTURE", "GAME_STRATEGY", "GAME_ROLE_PLAYING", "GAME_MUSIC", "LIBRARIES_AND_DEMO", "COMICS"];
 const displayPerPage = 30;
 
 /* GET search page. */
@@ -26,6 +27,7 @@ router.get('/', function (req, res, next) {
             btnTypeArr: _btnTypeArr,
             sortTypeDict: _sortTypeDict,
             colArr: _colArr,
+            catArr: _catArr,
             query: req.query,
             widgets: {},
             pages: 0
@@ -40,7 +42,6 @@ router.get('/', function (req, res, next) {
         if (req.query.color !== 'All') {
             findObj.color = req.query.color;
         }
-
         switch (req.query.sortType) {
             case 'appDownloads':
                 _sortType = {downloads: 1};
@@ -53,7 +54,7 @@ router.get('/', function (req, res, next) {
         }
 
         let cQuery = function (callback) {
-            Count.find({widget_class: req.query.btnType})
+            Count.find(findObj)
                 .limit(1)
                 .exec(function (err, doc) {
                     if (err) {
@@ -91,6 +92,7 @@ router.get('/', function (req, res, next) {
                     btnTypeArr: _btnTypeArr,
                     sortTypeDict: _sortTypeDict,
                     colArr: _colArr,
+                    catArr: _catArr,
                     query: req.query,
                     widgets: {},
                     pages: 0
@@ -102,6 +104,7 @@ router.get('/', function (req, res, next) {
                     btnTypeArr: _btnTypeArr,
                     sortTypeDict: _sortTypeDict,
                     colArr: _colArr,
+                    catArr: _catArr,
                     query: req.query,
                     widgets: results[1],
                     pages: max_pages

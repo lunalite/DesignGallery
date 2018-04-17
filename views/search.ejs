@@ -108,7 +108,8 @@
             } %>
         </select><br><br>
 
-        <!-- <h4> Application Category </h4> -->
+        <!--<h4> Application Category </h4>-->
+
         <input type="hidden" name="page" value="1">
 
         <h4> Sort By </h4>
@@ -184,6 +185,10 @@
                                 <td><%= widgets[i].package_name %></td>
                             </tr>
                             <tr>
+                                <td><b>Category:</b></td>
+                                <td><%= widgets[i].category %></td>
+                            </tr>
+                            <tr>
                                 <td><b>Text: </b></td>
                                 <td><%= widgets[i].text %></td>
                             </tr>
@@ -192,11 +197,11 @@
                                 <td><%= widgets[i].widget_class %></td>
                             </tr>
                             <tr>
-                                <td><b>Coordinates:&emsp;</b></td>
+                                <td><b>Coordinates:&emsp</b></td>
                                 <td>[<%= widgets[i].coordinates['from'] %>] [<%= widgets[i].coordinates['to'] %>]</td>
                             </tr>
                             <tr>
-                                <td><b>Size:&emsp;</b></td>
+                                <td><b>Size:</b></td>
                                 <td><%= btnSize %></td>
                             </tr>
                             <tr>
