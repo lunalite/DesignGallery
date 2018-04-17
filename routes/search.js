@@ -12,6 +12,7 @@ const _sortTypeDict = {
     appDownloads: "Descending Number of Application Downloads",
     appAlpbAsc: "Descending Alphabetical Order"
 };
+const _colArr = ["All", "Red", "Orange", "Yellow", "Green", "Blue", "Purple", "Cyan", "Black", "White", "Pink", "Gray", "Brown", "Magenta"];
 const displayPerPage = 30;
 
 /* GET search page. */
@@ -24,6 +25,7 @@ router.get('/', function (req, res, next) {
             url: req.originalUrl,
             btnTypeArr: _btnTypeArr,
             sortTypeDict: _sortTypeDict,
+            colArr: _colArr,
             query: req.query,
             widgets: {},
             pages: 0
@@ -34,6 +36,9 @@ router.get('/', function (req, res, next) {
             findObj = {};
         } else {
             findObj = {widget_class: req.query.btnType};
+        }
+        if (req.query.color !== 'All') {
+            findObj.color = req.query.color;
         }
 
         switch (req.query.sortType) {
@@ -85,17 +90,18 @@ router.get('/', function (req, res, next) {
                     url: req.originalUrl,
                     btnTypeArr: _btnTypeArr,
                     sortTypeDict: _sortTypeDict,
+                    colArr: _colArr,
                     query: req.query,
                     widgets: {},
                     pages: 0
                 });
-                console.log('error, beyond pages');
             } else {
                 res.render('search', {
                     title: 'Mobile UI Gallery - Search for widgets',
                     url: req.originalUrl,
                     btnTypeArr: _btnTypeArr,
                     sortTypeDict: _sortTypeDict,
+                    colArr: _colArr,
                     query: req.query,
                     widgets: results[1],
                     pages: max_pages

@@ -88,7 +88,26 @@
             <% }
             } %>
         </select><br><br>
-        <!-- <h4> Color </h4> -->
+
+        <h4> Color </h4>
+        <select class="custom-select" id="color" name="color">
+            <% if (!colArr.includes(query.color)) { %>
+            <option selected value="All">All</option>
+            <% } else { %>
+            <option value="All">All</option>
+            <% }
+            for (var i = 0; i < colArr.length; i++) {
+                if (colArr[i] === 'All') {
+                    continue;
+                }
+            if (query.color === colArr[i]) { %>
+            <option selected> <%= colArr[i] %></option>
+            <% }else { %>
+            <option> <%= colArr[i] %></option>
+            <% }
+            } %>
+        </select><br><br>
+
         <!-- <h4> Application Category </h4> -->
         <input type="hidden" name="page" value="1">
 
