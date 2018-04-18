@@ -6,17 +6,22 @@
             http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
     <url>
         <loc>https://mui-collection.herokuapp.com/</loc>
-        <lastmod>2018-04-14</lastmod>
+        <lastmod>2018-04-18T01:56:36+00:00	</lastmod>
         <priority>1.00</priority>
     </url>
     <url>
         <loc>https://mui-collection.herokuapp.com/search</loc>
-        <lastmod>2018-04-14</lastmod>
+        <lastmod>2018-04-18T01:56:36+00:00	</lastmod>
         <priority>0.80</priority>
     </url>
     <url>
         <loc>https://mui-collection.herokuapp.com/about</loc>
-        <lastmod>2018-04-14</lastmod>
+        <lastmod>2018-04-18T01:56:36+00:00	</lastmod>
+        <priority>0.80</priority>
+    </url>
+    <url>
+        <loc>https://mui-collection.herokuapp.com/contact</loc>
+        <lastmod>2018-04-18T01:56:36+00:00	</lastmod>
         <priority>0.80</priority>
     </url>
     <url>
