@@ -108,7 +108,24 @@
             } %>
         </select><br><br>
 
-        <!--<h4> Application Category </h4>-->
+        <h4> Application Category </h4>
+        <select class="custom-select" id="category" name="category">
+            <% if (!catArr.includes(query.category)) { %>
+            <option selected value="All">All</option>
+            <% } else { %>
+            <option value="All">All</option>
+            <% }
+            for (var i = 0; i < catArr.length; i++) {
+                if (catArr[i] === 'All') {
+                    continue;
+                }
+            if (query.category === catArr[i]) { %>
+            <option selected> <%= catArr[i] %></option>
+            <% }else { %>
+            <option> <%= catArr[i] %></option>
+            <% }
+            } %>
+        </select><br><br>
 
         <input type="hidden" name="page" value="1">
 

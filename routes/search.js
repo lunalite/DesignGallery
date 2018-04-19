@@ -42,6 +42,9 @@ router.get('/', function (req, res, next) {
         if (req.query.color !== 'All') {
             findObj.color = req.query.color;
         }
+        if (req.query.category !== 'All') {
+            findObj.category = req.query.category;
+        }
         switch (req.query.sortType) {
             case 'appDownloads':
                 _sortType = {downloads: 1};
@@ -52,6 +55,7 @@ router.get('/', function (req, res, next) {
             default:
                 break
         }
+        console.log(findObj);
 
         let cQuery = function (callback) {
             Count.find(findObj)
