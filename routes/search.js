@@ -55,7 +55,6 @@ router.get('/', function (req, res, next) {
             default:
                 break
         }
-        console.log(findObj);
 
         let cQuery = function (callback) {
             Count.find(findObj)

@@ -67,7 +67,8 @@
     <h2 class="my-4 text-center text-lg-left">A gallery made for Android developers</h2>
     <div>A collection of more than 30,000 widgets coming from different applications found on the Google Play Store. In
         our repository, we make it simple for developers to use it by providing details of the application screenshot as
-        well as a <b>red-box</b> of where the widget is located at.<br><br>
+        well as a <b>red-box</b> of where the widget is located at. We have several examples of such widgets listed
+        below.<br><br>
         <p>To search for more widgets or particular classes, please click on the search button below:</p>
     </div>
     <br>
@@ -77,15 +78,17 @@
 
     <hr/>
 
+    <% for (let j = 0; j < chosenArr.length; j++) { %>
+    <h3 class="my-4 text-center text-lg-left"><%= chosenArr[j] %></h3>
     <section class="image-grid">
 
-        <% for(i = 0; i < widgets.length; i++) {
-            var btnSize = widgets[i].dimensions['width'] + 'x' + widgets[i].dimensions['height']; %>
+        <% for(let i = 0; i < widgets[chosenArr[j]].length; i++) {
+            var btnSize = widgets[chosenArr[j]][i].dimensions['width'] + 'x' + widgets[chosenArr[j]][i].dimensions['height']; %>
         <article class="image__cell is-collapsed">
             <div class="image--basic" style="height:100px">
                 <a href="#expand-jump-<%= i %>">
                     <img id="expand-jump-<%= i %>" class="basic__img"
-                         src="https://storage.googleapis.com/ui-collection-gcs/widgets/<%= widgets[i].widget_class + '/' + widgets[i].name + '.png' %>"
+                         src="https://storage.googleapis.com/ui-collection-gcs/widgets/<%= widgets[chosenArr[j]][i].widget_class + '/' + widgets[chosenArr[j]][i].name + '.png' %>"
                          style="max-height:100px;"/>
                 </a>
             </div>
@@ -93,10 +96,10 @@
             <div class="image--expand">
                 <div class="modal-body row">
                     <div class="col-md-5">
-                        <% var left = widgets[i].coordinates['from'][0]; %>
-                        <% var top = widgets[i].coordinates['from'][1]; %>
-                        <% var width = widgets[i].dimensions['width']; %>
-                        <% var height = widgets[i].dimensions['height']; %>
+                        <% var left = widgets[chosenArr[j]][i].coordinates['from'][0]; %>
+                        <% var top = widgets[chosenArr[j]][i].coordinates['from'][1]; %>
+                        <% var width = widgets[chosenArr[j]][i].dimensions['width']; %>
+                        <% var height = widgets[chosenArr[j]][i].dimensions['height']; %>
                         <div id="highlight-box" style="
                                 position:absolute;
                                 left:<%= left %>px;
@@ -106,7 +109,7 @@
                                 ">
                         </div>
                         <img class="image--large"
-                                <% var screenSrc = widgets[i].src.split('/') %>
+                                <% var screenSrc = widgets[chosenArr[j]][i].src.split('/') %>
                              src="https://storage.googleapis.com/ui-collection-gcs/<%= screenSrc[3] + '/' + screenSrc[4] + '/' + screenSrc[7] + '.png' %>"
                              style="max-height:640px"/>
                     </div>
@@ -114,33 +117,35 @@
                         <table cellpadding="0" cellspacing="0" border="0" class="app-detail">
                             <tr>
                                 <td><b>Application: </b></td>
-                                <td><a href="<%= widgets[i].url %>">
-                                        <% if (!widgets[i].application_name) { %>
+                                <td><a href="<%= widgets[chosenArr[j]][i].url %>">
+                                        <% if (!widgets[chosenArr[j]][i].application_name) { %>
                                         Non-ascii
                                         <% } else { %>
-                                        <%= widgets[i].application_name %>
+                                        <%= widgets[chosenArr[j]][i].application_name %>
                                         <% } %>
                                     </a></td>
                             </tr>
                             <tr>
                                 <td><b>Package: </b></td>
-                                <td><%= widgets[i].package_name %></td>
+                                <td><%= widgets[chosenArr[j]][i].package_name %></td>
                             </tr>
                             <tr>
                                 <td><b>Category:</b></td>
-                                <td><%= widgets[i].category %></td>
+                                <td><%= widgets[chosenArr[j]][i].category %></td>
                             </tr>
                             <tr>
                                 <td><b>Text: </b></td>
-                                <td><%= widgets[i].text %></td>
+                                <td><%= widgets[chosenArr[j]][i].text %></td>
                             </tr>
                             <tr>
                                 <td><b>Class: </b></td>
-                                <td><%= widgets[i].widget_class %></td>
+                                <td><%= widgets[chosenArr[j]][i].widget_class %></td>
                             </tr>
                             <tr>
                                 <td><b>Coordinates:&emsp;</b></td>
-                                <td>[<%= widgets[i].coordinates['from'] %>] [<%= widgets[i].coordinates['to'] %>]</td>
+                                <td>[<%= widgets[chosenArr[j]][i].coordinates['from'] %>]
+                                    [<%= widgets[chosenArr[j]][i].coordinates['to'] %>]
+                                </td>
                             </tr>
                             <tr>
                                 <td><b>Size:&emsp;</b></td>
@@ -148,11 +153,11 @@
                             </tr>
                             <tr>
                                 <td><b>Color: </b></td>
-                                <td> <%= widgets[i].color %></td>
+                                <td> <%= widgets[chosenArr[j]][i].color %></td>
                             </tr>
                             <tr>
                                 <td><b>Downloads:</b></td>
-                                <td><%= widgets[i].downloads %></td>
+                                <td><%= widgets[chosenArr[j]][i].downloads %></td>
                             </tr>
                         </table>
                     </div>
@@ -164,6 +169,7 @@
         </article>
         <% } %>
     </section>
+    <% } %>
 
 </div>
 <!-- /.container -->
