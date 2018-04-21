@@ -14,7 +14,8 @@ const id = {
     CheckBox: [10824, 7601, 13465, 13501, 5558, 4843, 23515, 12402, 12703, 4883],
     EditText: [17487, 26761, 1077, 1068, 5361, 5471, 9109, 8896, 4836, 5691],
     ProgressBar: [28379, 17697, 18063, 16855, 22050, 20614, 15516, 15630, 22571, 22626],
-    ToggleButton: [10201, 11041, 3185, 10300, 8698, 8700, 7150, 8700, 2457, 7150]
+    ToggleButton: [10201, 11041, 3185, 10300, 8698, 8700, 7150, 8700, 2457, 7150],
+    Spinner: [10474, 5256, 22902, 13969, 4810, 1721, 4194, 9579, 14108, 22422]
 };
 const _chosenArr = ["CheckBox", "EditText", "ProgressBar"];
 //rs-ds227199:PRIMARY> db.widgets.find({$or:[{name:"clipping-10824"}, {name:"clipping-7601"}]})
@@ -26,13 +27,15 @@ router.get('/', function (req, res, next) {
         findObj["$or"].push({name: 'clipping-' + id.EditText[i]});
         findObj["$or"].push({name: 'clipping-' + id.ProgressBar[i]});
         findObj["$or"].push({name: 'clipping-' + id.ToggleButton[i]});
+        findObj["$or"].push({name: 'clipping-' + id.Spinner[i]});
     }
     Widget.find(findObj).exec(function (err, doc) {
         let _widgets = {
             CheckBox: [],
             EditText: [],
             ProgressBar: [],
-            ToggleButton: []
+            ToggleButton: [],
+            Spinner: []
         };
         for (let i = 0; i < doc.length; i++) {
             switch (doc[i].widget_class) {
@@ -47,6 +50,9 @@ router.get('/', function (req, res, next) {
                     break;
                 case 'ToggleButton':
                     _widgets['ToggleButton'].push(doc[i]);
+                    break;
+                case 'Spinner':
+                    _widgets['Spinner'].push(doc[i]);
                     break;
             }
 
