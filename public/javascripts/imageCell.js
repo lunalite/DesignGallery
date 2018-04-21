@@ -7,15 +7,20 @@ $('document').ready(function () {
         if ($thisCell.hasClass('is-collapsed')) {
             $cell.not($thisCell).removeClass('is-expanded').addClass('is-collapsed');
             $thisCell.removeClass('is-collapsed').addClass('is-expanded');
+            let coords = $thisCell.find('.coords').html();
+            let coordReg = /\[(\d+),(\d+)]/g;
+            let coordRes = coordReg.exec(coords);
+            let widSize = $thisCell.find('.widSize').html();
+            let widReg = /(\d+)x(\d+)/g;
+            let widRes = widReg.exec(widSize);
 
             let width = $thisCell.find('.image--large')[0].clientWidth;
             let ratio = width / 800;
-            console.log(ratio);
-            let cssDetail = $thisCell.find('#highlight-box').css(['left', 'top', 'width', 'height']);
-            let _left = parseInt(cssDetail['left'].replace(/px/g, '')) * ratio + 10;
-            let _top = parseInt(cssDetail['top'].replace(/px/g, '')) * ratio -5;
-            let _height = parseInt(cssDetail['height'].replace(/px/g, '')) * ratio;
-            let _width = parseInt(cssDetail['width'].replace(/px/g, '')) * ratio;
+            let _left = parseInt(coordRes[1]) * ratio + 10;
+            let _top = parseInt(coordRes[2]) * ratio - 5;
+            let _height = parseInt(widRes[2]) * ratio;
+            let _width = parseInt(widRes[1]) * ratio;
+
             let styles = {
                 position: 'absolute',
                 left: _left,
@@ -34,4 +39,8 @@ $('document').ready(function () {
         let $thisCell = $(this).closest('.image__cell');
         $thisCell.removeClass('is-expanded').addClass('is-collapsed');
     });
+
+    function changeRedBox(expand, _cell) {
+
+    }
 });

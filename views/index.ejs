@@ -86,8 +86,8 @@
             var btnSize = widgets[chosenArr[j]][i].dimensions['width'] + 'x' + widgets[chosenArr[j]][i].dimensions['height']; %>
         <article class="image__cell is-collapsed">
             <div class="image--basic" style="height:100px">
-                <a href="#expand-jump-<%= i %>">
-                    <img id="expand-jump-<%= i %>" class="basic__img"
+                <a href="#expand-jump-<%= 10 * (j - 1) + i %>">
+                    <img id="expand-jump-<%= 10 * (j - 1) + i %>" class="basic__img"
                          src="https://storage.googleapis.com/ui-collection-gcs/widgets/<%= widgets[chosenArr[j]][i].widget_class + '/' + widgets[chosenArr[j]][i].name + '.png' %>"
                          style="max-height:100px;"/>
                 </a>
@@ -96,18 +96,7 @@
             <div class="image--expand">
                 <div class="modal-body row">
                     <div class="col-md-5">
-                        <% var left = widgets[chosenArr[j]][i].coordinates['from'][0]; %>
-                        <% var top = widgets[chosenArr[j]][i].coordinates['from'][1]; %>
-                        <% var width = widgets[chosenArr[j]][i].dimensions['width']; %>
-                        <% var height = widgets[chosenArr[j]][i].dimensions['height']; %>
-                        <div id="highlight-box" style="
-                                position:absolute;
-                                left:<%= left %>px;
-                                top:<%= top %>px;
-                                width:<%= width %>px;
-                                height:<%= height %>px;
-                                ">
-                        </div>
+                        <div id="highlight-box"></div>
                         <img class="image--large"
                                 <% var screenSrc = widgets[chosenArr[j]][i].src.split('/') %>
                              src="https://storage.googleapis.com/ui-collection-gcs/<%= screenSrc[3] + '/' + screenSrc[4] + '/' + screenSrc[7] + '.png' %>"
@@ -143,13 +132,14 @@
                             </tr>
                             <tr>
                                 <td><b>Coordinates:&emsp;</b></td>
-                                <td>[<%= widgets[chosenArr[j]][i].coordinates['from'] %>]
+                                <td class="coords">
+                                    [<%= widgets[chosenArr[j]][i].coordinates['from'] %>]
                                     [<%= widgets[chosenArr[j]][i].coordinates['to'] %>]
                                 </td>
                             </tr>
                             <tr>
                                 <td><b>Size:&emsp;</b></td>
-                                <td><%= btnSize %></td>
+                                <td class="widSize"><%= btnSize %></td>
                             </tr>
                             <tr>
                                 <td><b>Color: </b></td>

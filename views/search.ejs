@@ -127,6 +127,10 @@
             } %>
         </select><br><br>
 
+        <h4> Text Filter </h4>
+        <input type="text" class="form-control" id="text" name="text" value="<%= query.text %>">
+        <br><br>
+
         <input type="hidden" name="page" value="1">
 
         <h4> Sort By </h4>
@@ -169,16 +173,7 @@
             <div class="image--expand">
                 <div class="modal-body row">
                     <div class="col-md-5">
-                        <% var left = widgets[i].coordinates['from'][0]; %>
-                        <% var top = widgets[i].coordinates['from'][1]; %>
-                        <% var width = widgets[i].dimensions['width']; %>
-                        <% var height = widgets[i].dimensions['height']; %>
-                        <div id="highlight-box" style="
-                                left:<%= left %>px;
-                                top:<%= top %>px;
-                                width:<%= width %>px;
-                                height:<%= height %>px;
-                                ">
+                        <div id="highlight-box">
                         </div>
                         <img class="image--large"
                                 <% var screenSrc = widgets[i].src.split('/') %>
@@ -215,11 +210,14 @@
                             </tr>
                             <tr>
                                 <td><b>Coordinates:&emsp;</b></td>
-                                <td>[<%= widgets[i].coordinates['from'] %>] [<%= widgets[i].coordinates['to'] %>]</td>
+                                <td class="coords">
+                                    [<%= widgets[i].coordinates['from'] %>]
+                                    [<%= widgets[i].coordinates['to'] %>]
+                                </td>
                             </tr>
                             <tr>
                                 <td><b>Size:</b></td>
-                                <td><%= btnSize %></td>
+                                <td class="widSize"><%= btnSize %></td>
                             </tr>
                             <tr>
                                 <td><b>Color: </b></td>

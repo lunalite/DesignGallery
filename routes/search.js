@@ -45,6 +45,9 @@ router.get('/', function (req, res, next) {
         if (req.query.category !== 'All') {
             findObj.category = req.query.category;
         }
+        if (req.query.text !== '') {
+            findObj.text = new RegExp(req.query.text);
+        }
         switch (req.query.sortType) {
             case 'appDownloads':
                 _sortType = {downloads: 1};
@@ -57,16 +60,20 @@ router.get('/', function (req, res, next) {
         }
 
         let cQuery = function (callback) {
-            Count.find(findObj)
-                .limit(1)
-                .exec(function (err, doc) {
-                    if (err) {
-                        callback(err, null)
-                    }
-                    else {
-                        callback(null, doc);
-                    }
-                });
+            if (findObj.hasOwnProperty('text')) {
+                callback(null, [[1]])
+            } else {
+                Count.find(findObj)
+                    .limit(1)
+                    .exec(function (err, doc) {
+                        if (err) {
+                            callback(err, null)
+                        }
+                        else {
+                            callback(null, doc);
+                        }
+                    });
+            }
         };
 
         let rQuery = function (callback) {
@@ -86,6 +93,7 @@ router.get('/', function (req, res, next) {
 
         async.parallel([cQuery, rQuery], function (err, results) {
             let max_pages = Math.ceil(results[0][0]['count'] / displayPerPage);
+            console.log(max_pages);
             if (err) {
                 return next(err);
             } else if (req.query.page > max_pages) {
