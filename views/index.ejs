@@ -84,10 +84,11 @@
 
         <% for(let i = 0; i < widgets[chosenArr[j]].length; i++) {
             var btnSize = widgets[chosenArr[j]][i].dimensions['width'] + 'x' + widgets[chosenArr[j]][i].dimensions['height']; %>
+        <span class="anchor" id="#expand-jump-<%= 10 * (j - 1) + i %>"></span>
         <article class="image__cell is-collapsed">
             <div class="image--basic" style="height:100px">
                 <a href="#expand-jump-<%= 10 * (j - 1) + i %>">
-                    <img id="expand-jump-<%= 10 * (j - 1) + i %>" class="basic__img"
+                    <img class="basic__img"
                          src="https://storage.googleapis.com/ui-collection-gcs/widgets/<%= widgets[chosenArr[j]][i].widget_class + '/' + widgets[chosenArr[j]][i].name + '.png' %>"
                          style="max-height:100px;"/>
                 </a>

@@ -162,9 +162,10 @@
         <% for(i = 0; i < widgets.length; i++) {
             var btnSize = widgets[i].dimensions['width'] + 'x' + widgets[i].dimensions['height']; %>
         <article class="image__cell is-collapsed">
+            <span class="anchor" id="expand-jump-<%= i %>"></span>
             <div class="image--basic" style="height:100px">
                 <a href="#expand-jump-<%= i %>">
-                    <img id="expand-jump-<%= i %>" class="basic__img"
+                    <img class="basic__img"
                          src="https://storage.googleapis.com/ui-collection-gcs/widgets/<%= widgets[i].widget_class + '/' + widgets[i].name + '.png' %>"
                          style="max-height:100px;"/>
                 </a>
