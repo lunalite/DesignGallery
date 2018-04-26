@@ -153,3 +153,12 @@ html {
     }
 
 }
+
+.anchor:before {
+    content: "";
+    display: block;
+    height: 460px; /* fixed header height*/
+    margin: -460px 0 0; /* negative fixed header height */
+}
+
+.navbar-fixed-top { position: absolute!important; }

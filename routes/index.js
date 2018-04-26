@@ -17,7 +17,7 @@ const id = {
     ToggleButton: [10201, 11041, 3185, 10300, 8698, 8700, 7150, 8700, 2457, 7150],
     Spinner: [10474, 5256, 22902, 13969, 4810, 1721, 4194, 9579, 14108, 22422]
 };
-const _chosenArr = ["CheckBox", "EditText", "ProgressBar", "Spinner"];
+const _chosenArr = ["CheckBox", "EditText", "ProgressBar", "ToggleButton", "Spinner"];
 //rs-ds227199:PRIMARY> db.widgets.find({$or:[{name:"clipping-10824"}, {name:"clipping-7601"}]})
 /* GET home page. */
 router.get('/', function (req, res, next) {
