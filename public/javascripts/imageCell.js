@@ -1,7 +1,8 @@
 function addCall() {
     let $cell = $('.image__cell');
 
-    $cell.find('.image--basic').click(function () {
+    // TODO: Very inefficient for removing and adding of click handler.
+    $cell.find('.image--basic').off('click').on('click', function () {
         let $thisCell = $(this).closest('.image__cell');
 
         if ($thisCell.hasClass('is-collapsed')) {
@@ -35,7 +36,7 @@ function addCall() {
         }
     });
 
-    $cell.find('.expand__close').click(function () {
+    $cell.find('.expand__close').off('click').on('click', function () {
         let $thisCell = $(this).closest('.image__cell');
         $thisCell.removeClass('is-expanded').addClass('is-collapsed');
     });

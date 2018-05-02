@@ -165,7 +165,6 @@ router.post('/', function (req, res, next) {
             .skip((req.body.page - 1) * displayPerPage)
             .limit(displayPerPage)
             .exec(function (err, doc) {
-                console.log(doc);
                 if (err) {
                     return next(err);
                 }
