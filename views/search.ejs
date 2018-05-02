@@ -131,8 +131,6 @@
         <input type="text" class="form-control" id="text" name="text" value="<%= query.text %>">
         <br><br>
 
-        <input type="hidden" name="page" value="1">
-
         <h4> Sort By </h4>
         <select class="custom-select" id="sortType" name="sortType">
             <% if (!((query.sortType) in sortTypeDict)) { %>
@@ -151,6 +149,8 @@
             <% }
             } %>
         </select><br><br>
+
+        <input type="hidden" name="page" value="1">
 
         <div class="form-group">
             <button type="submit" class="btn btn-primary">Submit</button>
@@ -238,44 +238,7 @@
         </article>
         <% } %>
     </section>
-
-    <!-- pagination -->
-    <% if (pages > 0) { %>
-    <div class="container">
-        <nav aria-label="Page navigation example">
-            <ul class="pagination justify-content-center">
-                <% if (query.page === '1') { %>
-                <li class="page-item disabled"><a class="page-link">First</a></li>
-                <% } else { %>
-                <li class="page-item"><a class="page-link" href="<%= url.replace(/page=\d+/, 'page=1'); %>">First</a>
-                </li>
-                <% } %>
-                <% i = (Number(query.page) > 5 ? Number(query.page) - 4 : 1) %>
-                <% if (i !== 1) { %>
-                <li class="page-item disabled"><a class="page-link">...</a></li>
-                <% } %>
-                <% for (; i <= (Number(query.page) + 4) && i <= pages; i++) { %>
-                <% if (i == query.page) { %>
-                <li class="page-item active"><a class="page-link"><%= i %></a></li>
-                <% } else { %>
-                <li class="page-item"><a class="page-link"
-                                         href="<%= url.replace(/page=\d+/, 'page=' + i); %>"><%= i %></a></li>
-                <% } %>
-                <% if (i == Number(query.page) + 4 && i < pages) { %>
-                <li class="page-item disabled"><a class="page-link">...</a></li>
-                <% } %>
-                <% } %>
-                <% if (query.page == pages) { %>
-                <li class="page-item disabled"><a class="page-link">Last</a></li>
-                <% } else { %>
-                <li class="page-item"><a class="page-link"
-                                         href="<%= url.replace(/page=\d+/, 'page=' + pages); %>">Last</a></li>
-                <% } %>
-            </ul>
-        </nav>
-    </div>
-    <% } %>
-
+    
 </div>
 <!-- /.container -->
 <!-- footer -->
@@ -291,8 +254,125 @@
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
 
-<script src="/javascripts/imageCell.js">
+<script src="/javascripts/imageCell.js"></script>
 
+<script>
+    var getUrlParameter = function getUrlParameter(sParam) {
+        var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+            sURLVariables = sPageURL.split('&'),
+            sParameterName,
+            i;
+
+        for (i = 0; i < sURLVariables.length; i++) {
+            sParameterName = sURLVariables[i].split('=');
+
+            if (sParameterName[0] === sParam) {
+                return sParameterName[1] === undefined ? true : sParameterName[1];
+            }
+        }
+    };
+
+    $(document).ready(function () {
+        addCall();
+        let _page = parseInt(getUrlParameter('page'));
+
+        $(window).scroll(function () {
+            _page += 1;
+            if ($(window).scrollTop() == $(document).height() - $(window).height()) {
+                let ajaxData = {
+                    btnType: getUrlParameter('btnType'),
+                    color: getUrlParameter('color'),
+                    text: getUrlParameter('text'),
+                    category: getUrlParameter('category'),
+                    sortType: getUrlParameter('sortType'),
+                    page: _page
+                }
+                let html = ""
+                $.ajax({
+                    url: "./search",
+                    type: 'POST',
+                    data: ajaxData,
+                    success: function (widgets) {
+                        for (let i = 0; i < widgets.length; i++) {
+                            let btnSize = widgets[i].dimensions['width'] + 'x' + widgets[i].dimensions['height'];
+                            html += '<span class="anchor" id="#expand-jump-' + i + '"></span>'
+                            html += '<article class="image__cell is-collapsed">'
+                            html += '<div class="image--basic" style="height:100px">'
+                            html += '<a href="#expand-jump-' + i + '">'
+                            html += '<img class="basic__img" src="https://storage.googleapis.com/ui-collection-gcs/widgets/' + widgets[i].widget_class + '/' + widgets[i].name + '.png" style="max-height:100px;"/>'
+                            html += '</a>'
+                            html += '</div>'
+                            html += '<div class="arrow--up"></div>'
+                            html += '<div class="image--expand">'
+                            html += '<div class="modal-body row">'
+                            html += '<div class="col-md-5">'
+                            html += '<div id="highlight-box">'
+                            html += '</div>'
+                            let screenSrc = widgets[i].src.split('/');
+                            html += '<img class="image--large" src="https://storage.googleapis.com/ui-collection-gcs/' + screenSrc[3] + '/' + screenSrc[4] + '/' + screenSrc[7] + '.png" style="max-height:640px"/>'
+                            html += '</div>'
+                            html += '<div class="col-md-5 align-self-center">'
+                            html += '<table cellpadding="0" cellspacing="0" border="0" class="app-detail">'
+                            html += '<tr>'
+                            html += '<td><b>Application: </b></td>'
+                            html += '<td><a href="' + widgets[i].url + '">'
+                            if (!widgets[i].application_name) {
+                                html += 'Non-ascii'
+                            } else {
+                                html += widgets[i].application_name
+                            }
+                            html += '</a></td>'
+                            html += '</tr>'
+                            html += '<td><b>Package: </b></td>'
+                            html += '<td>' + widgets[i].package_name + '</td>'
+                            html += '<tr>'
+                            html += '<td><b>Category:</b></td>'
+                            html += '<td>' + widgets[i].category + '</td>'
+                            html += '</tr>'
+                            html += '<tr>'
+                            html += '<td><b>Text: </b></td>'
+                            html += '<td>' + widgets[i].text + '</td>'
+                            html += '</tr>'
+                            html += '<tr>'
+                            html += '<td><b>Class: </b></td>'
+                            html += '<td>' + widgets[i].widget_class + '</td>'
+                            html += '</tr>'
+                            html += '<tr>'
+                            html += '<td><b>Coordinates:&emsp;</b></td>'
+                            html += '<td class="coords">[' + widgets[i].coordinates['from'] + '][' + widgets[i].coordinates['to'] + ']</td>'
+                            html += '</tr>'
+                            html += '<tr>'
+                            html += '<td><b>Size:</b></td>'
+                            html += '<td class="widSize">' + btnSize + '</td>'
+                            html += '</tr>'
+                            html += '<tr>'
+                            html += '<td><b>Color: </b></td>'
+                            html += '<td>' + widgets[i].color + '</td>'
+                            html += '</tr>'
+                            html += '<tr>'
+                            html += '<td><b>Downloads:</b></td>'
+                            html += '<td>' + widgets[i].downloads + '</td>'
+                            html += '</tr>'
+                            html += '</table>'
+                            html += '</div>'
+                            html += '<div>'
+                            html += '<a href="#close-jump-' + i + '" class="expand__close"></a>'
+                            html += '</div>'
+                            html += '</div>'
+                            html += '</div>'
+                            html += '</article>'
+
+                        }
+                        $(".image-grid").append(html);    // This will be the div where our content will be loaded
+                        addCall();
+                    }
+                });
+
+            }
+        });
+
+    });
 </script>
+
 </body>
 </html>

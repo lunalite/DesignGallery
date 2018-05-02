@@ -1,4 +1,4 @@
-$('document').ready(function () {
+function addCall() {
     let $cell = $('.image__cell');
 
     $cell.find('.image--basic').click(function () {
@@ -39,8 +39,4 @@ $('document').ready(function () {
         let $thisCell = $(this).closest('.image__cell');
         $thisCell.removeClass('is-expanded').addClass('is-collapsed');
     });
-
-    function changeRedBox(expand, _cell) {
-
-    }
-});
+}

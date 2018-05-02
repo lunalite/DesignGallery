@@ -7,7 +7,7 @@ const Widget = mongoose.model('Widget');
 const Count = mongoose.model('Count');
 const Util = require('../util/util');
 
-const _btnTypeArr = ["All", "CheckBox", "Chronometer", "CompoundButton",  "ImageButton", "ProgressBar", "RadioButton", "RatingBar", "SeekBar", "Spinner", "Switch", "ToggleButton"];
+const _btnTypeArr = ["All", "CheckBox", "Chronometer", "CompoundButton", "ImageButton", "ProgressBar", "RadioButton", "RatingBar", "SeekBar", "Spinner", "Switch", "ToggleButton"];
 //"EditText", "View"
 const _sortTypeDict = {
     appDownloads: "Descending Number of Application Downloads",
@@ -15,7 +15,7 @@ const _sortTypeDict = {
 };
 const _colArr = ["All", "Red", "Orange", "Yellow", "Green", "Blue", "Purple", "Cyan", "Black", "White", "Pink", "Gray", "Brown", "Magenta"];
 const _catArr = ["All", "EDUCATION", "LIFESTYLE", "ENTERTAINMENT", "MUSIC_AND_AUDIO", "TOOLS", "PERSONALIZATION", "TRAVEL_AND_LOCAL", "NEWS_AND_MAGAZINES", "BOOKS_AND_REFERENCE", "BUSINESS", "FINANCE", "GAME_CASUAL", "SPORTS", "GAME_PUZZLE", "PRODUCTIVITY", "PHOTOGRAPHY", "HEALTH_AND_FITNESS", "TRANSPORTATION", "COMMUNICATION", "GAME_EDUCATIONAL", "SOCIAL", "MEDIA_AND_VIDEO", "SHOPPING", "GAME_ARCADE", "GAME_SIMULATION", "GAME_ACTION", "MEDICAL", "GAME_CARD", "WEATHER", "GAME_RACING", "GAME_BOARD", "GAME_SPORTS", "GAME_CASINO", "GAME_WORD", "GAME_TRIVIA", "GAME_ADVENTURE", "GAME_STRATEGY", "GAME_ROLE_PLAYING", "GAME_MUSIC", "LIBRARIES_AND_DEMO", "COMICS"];
-const displayPerPage = 30;
+const displayPerPage = 20;
 
 /* GET search page. */
 router.get('/', function (req, res, next) {
@@ -94,7 +94,6 @@ router.get('/', function (req, res, next) {
 
         async.parallel([cQuery, rQuery], function (err, results) {
             let max_pages = Math.ceil(results[0][0]['count'] / displayPerPage);
-            console.log(max_pages);
             if (err) {
                 return next(err);
             } else if (req.query.page > max_pages) {
@@ -124,6 +123,54 @@ router.get('/', function (req, res, next) {
             }
         });
 
+    }
+
+});
+
+
+router.post('/', function (req, res, next) {
+
+    if (!Util.isPositiveInteger(req.body.page) && req.body.page) {
+        next(new Error('Page is not a positive integer'));
+    } else {
+        let findObj = {};
+        if (req.body.btnType === 'All') {
+            findObj = {};
+        } else {
+            findObj = {widget_class: req.body.btnType};
+        }
+        if (req.body.color !== 'All') {
+
+            findObj.color = req.body.color;
+        }
+        if (req.body.category !== 'All') {
+            findObj.category = req.body.category;
+        }
+        if (req.body.text !== '') {
+            findObj.text = new RegExp(req.body.text);
+        }
+        switch (req.body.sortType) {
+            case 'appDownloads':
+                _sortType = {downloads: 1};
+                break;
+            case 'appAlpbAsc':
+                _sortType = {application_name: 1};
+                break;
+            default:
+                break
+        }
+
+        Widget.find(findObj)
+            .sort(_sortType)
+            .skip((req.body.page - 1) * displayPerPage)
+            .limit(displayPerPage)
+            .exec(function (err, doc) {
+                console.log(doc);
+                if (err) {
+                    return next(err);
+                }
+                res.json(doc);
+            });
     }
 
 });
