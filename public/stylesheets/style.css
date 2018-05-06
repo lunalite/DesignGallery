@@ -121,6 +121,11 @@ html {
         width: 200%;
     }
 
+    .image__cell.is-expanded .image--expand {
+        max-height: 1000px;
+        margin-bottom: 10px;
+    }
+
 }
 
 @media only screen and (min-width: 531px) {
@@ -161,7 +166,9 @@ html {
     margin: -460px 0 0; /* negative fixed header height */
 }
 
-.navbar-fixed-top { position: absolute!important; }
+.navbar-fixed-top {
+    position: absolute !important;
+}
 
 .loader {
     border: 5px solid #f3f3f3; /* Light grey */
@@ -173,6 +180,10 @@ html {
 }
 
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }
