@@ -315,9 +315,16 @@
 
     $(document).ready(function () {
         let _mainPage;
+        let widthArr;
+        let heightArr;
 
-        let widthArr = getUrlParameter('width').split(';');
-        let heightArr = getUrlParameter('height').split(';');
+        if (getUrlParameter('width') && getUrlParameter('height')) {
+            widthArr = getUrlParameter('width').split(';');
+            heightArr = getUrlParameter('height').split(';');
+        } else {
+            heightArr = [0, 1280];
+            widthArr = [0, 800];
+        }
 
         $("#height-slider").ionRangeSlider({
             type: "double",
