@@ -19,119 +19,22 @@ const displayPerPage = 20;
 
 /* GET search page. */
 router.get('/', function (req, res, next) {
-    if (!Util.isPositiveInteger(req.query.page) && req.query.page) {
-        next(new Error('Page is not a positive integer'));
-    } else if (!req.query.hasOwnProperty('sortType') || !req.query.hasOwnProperty('btnType')) {
-        res.render('search', {
-            title: 'Mobile UI Gallery - Search for widgets',
-            url: req.originalUrl,
-            btnTypeArr: _btnTypeArr,
-            sortTypeDict: _sortTypeDict,
-            colArr: _colArr,
-            catArr: _catArr,
-            query: req.query,
-            widgets: {},
-            pages: 0
-        });
-    } else {
-        let findObj;
-        if (req.query.btnType === 'All') {
-            findObj = {};
-        } else {
-            findObj = {widget_class: req.query.btnType};
-        }
-        if (req.query.color !== 'All') {
-            findObj.color = req.query.color;
-        }
-        if (req.query.category !== 'All') {
-            findObj.category = req.query.category;
-        }
-        if (req.query.text !== '') {
-            findObj.text = new RegExp(req.query.text);
-        }
-        switch (req.query.sortType) {
-            case 'appDownloads':
-                _sortType = {downloads: 1};
-                break;
-            case 'appAlpbAsc':
-                _sortType = {application_name: 1};
-                break;
-            default:
-                break
-        }
-
-        let cQuery = function (callback) {
-            if (findObj.hasOwnProperty('text')) {
-                callback(null, [[1]])
-            } else {
-                Count.find(findObj)
-                    .limit(1)
-                    .exec(function (err, doc) {
-                        if (err) {
-                            callback(err, null)
-                        }
-                        else {
-                            callback(null, doc);
-                        }
-                    });
-            }
-        };
-
-        let rQuery = function (callback) {
-            Widget.find(findObj)
-                .sort(_sortType)
-                .skip((req.query.page - 1) * displayPerPage)
-                .limit(displayPerPage)
-                .exec(function (err, doc) {
-                    if (err) {
-                        callback(err, null)
-                    }
-                    else {
-                        callback(null, doc);
-                    }
-                });
-        };
-
-        async.parallel([cQuery, rQuery], function (err, results) {
-            let max_pages = Math.ceil(results[0][0]['count'] / displayPerPage);
-            if (err) {
-                return next(err);
-            } else if (req.query.page > max_pages) {
-                res.render('search', {
-                    title: 'Mobile UI Gallery - Search for widgets',
-                    url: req.originalUrl,
-                    btnTypeArr: _btnTypeArr,
-                    sortTypeDict: _sortTypeDict,
-                    colArr: _colArr,
-                    catArr: _catArr,
-                    query: req.query,
-                    widgets: {},
-                    pages: 0
-                });
-            } else {
-                res.render('search', {
-                    title: 'Mobile UI Gallery - Search for widgets',
-                    url: req.originalUrl,
-                    btnTypeArr: _btnTypeArr,
-                    sortTypeDict: _sortTypeDict,
-                    colArr: _colArr,
-                    catArr: _catArr,
-                    query: req.query,
-                    widgets: results[1],
-                    pages: max_pages
-                });
-            }
-        });
-
-    }
-
+    res.render('search', {
+        title: 'Mobile UI Gallery - Search for widgets',
+        url: req.originalUrl,
+        btnTypeArr: _btnTypeArr,
+        sortTypeDict: _sortTypeDict,
+        colArr: _colArr,
+        catArr: _catArr,
+        query: req.query,
+    });
 });
 
 
 router.post('/', function (req, res, next) {
 
     if (!Util.isPositiveInteger(req.body.page) && req.body.page) {
-        next(new Error('Page is not a positive integer'));
+        return next(new Error('Page is not a positive integer'));
     } else {
         let findObj = {};
         if (req.body.btnType === 'All') {
@@ -149,6 +52,25 @@ router.post('/', function (req, res, next) {
         if (req.body.text !== '') {
             findObj.text = new RegExp(req.body.text);
         }
+
+        // Checking and parsing of width and height
+        let _widthArr = req.body.width.split(';').slice(0, 2);
+        if (_widthArr.every(function (value) {
+            return (value >= 0 && value <= 800);
+        })) {
+            findObj['dimensions.width'] = {"$gte": _widthArr[0], "$lte": _widthArr[1]};
+        } else {
+            return next(new Error('Invalid width.'));
+        }
+        let _heightArr = req.body.height.split(';').slice(0, 2);
+        if (_heightArr.every(function (value) {
+            return (value >= 0 && value <= 1280);
+        })) {
+            findObj['dimensions.height'] = {"$gte": _heightArr[0], "$lte": _heightArr[1]};
+        } else {
+            return next(new Error('Invalid height.'));
+        }
+
         switch (req.body.sortType) {
             case 'appDownloads':
                 _sortType = {downloads: 1};

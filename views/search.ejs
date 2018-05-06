@@ -15,6 +15,12 @@
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
+    <!-- CSS for ion.rangeSlider-->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.2.0/css/ion.rangeSlider.min.css"
+          rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.2.0/css/ion.rangeSlider.skinHTML5.css"
+          rel="stylesheet">
+
     <!-- Custom styles for this template -->
     <link href="stylesheets/style.css" rel="stylesheet">
 
@@ -127,6 +133,13 @@
             } %>
         </select><br><br>
 
+        <h4> Image Size </h4>
+        Wdith:
+        <input type="text" id="width-slider" name="width" value=""/>
+        Height:
+        <input type="text" id="height-slider" name="height" value=""/>
+        <br><br>
+
         <h4> Text Filter </h4>
         <input type="text" class="form-control" id="text" name="text" value="<%= query.text %>">
         <br><br>
@@ -161,6 +174,12 @@
     <section class="image-grid">
     </section>
 
+    <div class="row" style="margin-bottom:10px">
+        <div class="loader" style="display:none;margin: 0 auto;"></div>
+    </div>
+
+
+
 </div>
 <!-- /.container -->
 <!-- footer -->
@@ -172,6 +191,7 @@
 
 <!-- Bootstrap core JavaScript -->
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.2.0/js/ion.rangeSlider.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
@@ -195,12 +215,15 @@
     }
 
     function loadImages(_page) {
+        document.getElementsByClassName("loader")[0].style.display = "block";
         let ajaxData = {
             btnType: getUrlParameter('btnType'),
             color: getUrlParameter('color'),
             text: getUrlParameter('text'),
             category: getUrlParameter('category'),
             sortType: getUrlParameter('sortType'),
+            width: getUrlParameter('width'),
+            height: getUrlParameter('height'),
             page: _page
         }
         let html = ""
@@ -209,6 +232,7 @@
             type: 'POST',
             data: ajaxData,
             success: function (widgets) {
+                document.getElementsByClassName("loader")[0].style.display = "none";
                 for (let i = 0; i < widgets.length; i++) {
                     let btnSize = widgets[i].dimensions['width'] + 'x' + widgets[i].dimensions['height'];
                     html += '<span class="anchor" id="#expand-jump-' + i + '"></span>'
@@ -287,6 +311,27 @@
 
     $(document).ready(function () {
         let _mainPage;
+
+        let widthArr = getUrlParameter('width').split(';');
+        let heightArr = getUrlParameter('height').split(';');
+
+        $("#height-slider").ionRangeSlider({
+            type: "double",
+            min: 0,
+            max: 1280,
+            from: heightArr[0],
+            to: heightArr[1]
+        });
+
+        $("#width-slider").ionRangeSlider({
+            type: "double",
+            min: 0,
+            max: 800,
+            from: widthArr[0],
+            to: widthArr[1]
+
+        });
+
         if (getUrlParameter('page')) {
             _mainPage = parseInt(getUrlParameter('page'));
             loadImages(_mainPage);
