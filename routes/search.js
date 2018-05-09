@@ -13,11 +13,11 @@ const _sortTypeDict = {
     appDownloads: "Descending Number of Application Downloads",
     appAlpbAsc: "Descending Alphabetical Order"
 };
-const _colArr = ["All", "Red", "Orange", "Yellow", "Green", "Blue", "Purple", "Cyan", "Black", "White", "Pink", "Gray", "Brown", "Magenta"];
+const _colArr = ["All", "Red", "Beige", "Orange", "Yellow", "Green", "Blue", "Purple", "Cyan", "Black", "White", "Pink", "Gray", "Brown", "Magenta"];
 const _catArr = ["All", "EDUCATION", "LIFESTYLE", "ENTERTAINMENT", "MUSIC_AND_AUDIO", "TOOLS", "PERSONALIZATION", "TRAVEL_AND_LOCAL", "NEWS_AND_MAGAZINES", "BOOKS_AND_REFERENCE", "BUSINESS", "FINANCE", "GAME_CASUAL", "SPORTS", "GAME_PUZZLE", "PRODUCTIVITY", "PHOTOGRAPHY", "HEALTH_AND_FITNESS", "TRANSPORTATION", "COMMUNICATION", "GAME_EDUCATIONAL", "SOCIAL", "MEDIA_AND_VIDEO", "SHOPPING", "GAME_ARCADE", "GAME_SIMULATION", "GAME_ACTION", "MEDICAL", "GAME_CARD", "WEATHER", "GAME_RACING", "GAME_BOARD", "GAME_SPORTS", "GAME_CASINO", "GAME_WORD", "GAME_TRIVIA", "GAME_ADVENTURE", "GAME_STRATEGY", "GAME_ROLE_PLAYING", "GAME_MUSIC", "LIBRARIES_AND_DEMO", "COMICS"];
 const displayPerPage = 20;
 
-/* GET search page. */
+/* GET search pageff */
 router.get('/', function (req, res, next) {
     res.render('search', {
         title: 'Mobile UI Gallery - Search for widgets',
@@ -30,6 +30,28 @@ router.get('/', function (req, res, next) {
     });
 });
 
+router.get('/:package/:screenshotID', function (req, res, next) {
+    let findObj = {};
+    findObj.package_name = req.params.package;
+    findObj.src = new RegExp(req.params.screenshotID);
+    Widget.find(findObj)
+        .exec(function (err, doc) {
+            if (err) {
+                return next(err);
+            }
+            res.render('screenshot', {
+                title: 'Mobile UI Gallery - Widgets on the same screenshot',
+                url: req.originalUrl,
+                btnTypeArr: _btnTypeArr,
+                sortTypeDict: _sortTypeDict,
+                colArr: _colArr,
+                catArr: _catArr,
+                query: req.query,
+                widgets: doc
+            });
+        });
+
+});
 
 router.post('/', function (req, res, next) {
 
@@ -73,10 +95,16 @@ router.post('/', function (req, res, next) {
 
         switch (req.body.sortType) {
             case 'appDownloads':
-                _sortType = {downloads: 1};
+                _sortType = {
+                    downloads: 1,
+                    color: 1
+                };
                 break;
             case 'appAlpbAsc':
-                _sortType = {application_name: 1};
+                _sortType = {
+                    application_name: 1,
+                    color: 1
+                };
                 break;
             default:
                 break

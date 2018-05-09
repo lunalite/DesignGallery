@@ -89,7 +89,7 @@
             <div class="image--basic" style="height:100px">
                 <a href="#expand-jump-<%= 10 * (j - 1) + i %>">
                     <img class="basic__img"
-                         src="https://storage.googleapis.com/ui-collection-gcs/widgets/<%= widgets[chosenArr[j]][i].widget_class + '/' + widgets[chosenArr[j]][i].name + '.png' %>"
+                         src="https://storage.googleapis.com/ui-collection-gcs/widgets/<%= widgets[chosenArr[j]][i].widget_class + '/' + widgets[chosenArr[j]][i].name + '.jpeg' %>"
                          style="max-height:100px;"/>
                 </a>
             </div>
@@ -100,7 +100,7 @@
                         <div id="highlight-box"></div>
                         <img class="image--large"
                                 <% var screenSrc = widgets[chosenArr[j]][i].src.split('/') %>
-                             src="https://storage.googleapis.com/ui-collection-gcs/<%= screenSrc[3] + '/' + screenSrc[4] + '/' + screenSrc[7] + '.png' %>"
+                             src="https://storage.googleapis.com/ui-collection-gcs/<%= screenSrc[3] + '/' + screenSrc[4] + '/' + screenSrc[7] + '.jpeg' %>"
                              style="max-height:640px"/>
                     </div>
                     <div class="col-md-5 align-self-center">
