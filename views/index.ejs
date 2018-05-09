@@ -98,10 +98,12 @@
                 <div class="modal-body row">
                     <div class="col-md-5">
                         <div id="highlight-box"></div>
-                        <img class="image--large"
-                                <% var screenSrc = widgets[chosenArr[j]][i].src.split('/') %>
-                             src="https://storage.googleapis.com/ui-collection-gcs/<%= screenSrc[3] + '/' + screenSrc[4] + '/' + screenSrc[7] + '.jpeg' %>"
-                             style="max-height:640px"/>
+                        <% var screenSrc = widgets[chosenArr[j]][i].src.split('/') %>
+                        <a href="./search/<%= widgets[chosenArr[j]][i].package_name%>/<%= screenSrc[7] %>">
+                            <img class="image--large"
+                                 src="https://storage.googleapis.com/ui-collection-gcs/<%= screenSrc[3] + '/' + screenSrc[4] + '/' + screenSrc[7] + '.jpeg' %>"
+                                 style="max-height:640px"/>
+                        </a>
                     </div>
                     <div class="col-md-5 align-self-center">
                         <table cellpadding="0" cellspacing="0" border="0" class="app-detail">

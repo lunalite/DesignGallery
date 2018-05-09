@@ -78,14 +78,15 @@
         Find widgets with the following properties:<br><br>
         <form name="search" method="get" id="myform" action="/search" class="panel-body">
             <div class="row">
+
                 <div class="form-group form-inline">
                     <fieldset>
-                        <label>Text Filter</label>
+                        <label class="badge">Text Filter</label>
                         <input type="text" class="form-control" id="text" name="text" value="<%= query.text %>"
-                               placeholder="Text filter">
+                               placeholder="Text Filter">
                     </fieldset>
                     <fieldset>
-                        <label>Widget Class</label>
+                        <label class="badge">Widget Class</label>
                         <select class="custom-select form-control" id="btnType" name="btnType">
                             <% if (!btnTypeArr.includes(query.btnType)) { %>
                             <option selected value="All">All</option>
@@ -105,7 +106,7 @@
                         </select>
                     </fieldset>
                     <fieldset>
-                        <label>Color</label>
+                        <label class="badge">Color</label>
                         <select class="custom-select form-control" id="color" name="color">
                             <% if (!colArr.includes(query.color)) { %>
                             <option selected value="All">All</option>
@@ -125,7 +126,7 @@
                         </select>
                     </fieldset>
                     <fieldset>
-                        <label>Category</label>
+                        <label class="badge">Category</label>
                         <select class="custom-select form-control" id="category" name="category">
                             <% if (!catArr.includes(query.category)) { %>
                             <option selected value="All">All</option>
@@ -145,7 +146,7 @@
                         </select>
                     </fieldset>
                     <fieldset>
-                        <label>Sort By</label>
+                        <label class="badge">Sort By</label>
                         <select class="custom-select form-control" id="sortType" name="sortType">
                             <% if (!((query.sortType) in sortTypeDict)) { %>
                             <option selected value="appDownloads"> <%= sortTypeDict['appDownloads'] %></option>
@@ -169,13 +170,13 @@
             <div class="row">
                 <div class="col-md-6 col-xs-6">
                     <div class="form-group text-center">
-                        <label>Width</label>
+                        <label class="badge">Width</label>
                         <input type="text" id="width-slider" name="width" value=""/>
                     </div>
                 </div>
                 <div class="col-md-6 col-xs-6">
                     <div class="form-group text-center">
-                        <label>Height</label>
+                        <label class="badge">Height</label>
                         <input type="text" id="height-slider" name="height" value=""/>
                     </div>
                 </div>
