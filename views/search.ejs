@@ -75,101 +75,112 @@
     <h2 class="my-4 text-center text-lg-left">Widget Search</h2>
     <hr/>
     <div>
-        <% let searchDisplay = !(typeof query.page === 'undefined'); %>
-        <button type="button" class="btn btn-primary btn-block"
-                onclick="$(this).css('display', 'none'); $('#myform').css('display', 'block');"
-                style="display:<%= (searchDisplay ? 'block' : 'none') %>">
-            Search
-        </button>
-        <form name="search" method="get" id="myform" action="/search"
-              style="display:<%= (searchDisplay ? 'none' : 'block') %>">
-            Find widgets with the following properties:<br><br>
-            <h4> Type of widget </h4>
-            <select class="custom-select" id="btnType" name="btnType">
-                <% if (!btnTypeArr.includes(query.btnType)) { %>
-                <option selected value="All">All</option>
-                <% } else { %>
-                <option value="All">All</option>
-                <% }
-                for (var i = 0; i < btnTypeArr.length; i++) {
-                    if (btnTypeArr[i] === 'All') {
-                        continue;
-                    }
-                if (query.btnType === btnTypeArr[i]) { %>
-                <option selected> <%= btnTypeArr[i] %></option>
-                <% }else { %>
-                <option> <%= btnTypeArr[i] %></option>
-                <% }
-                } %>
-            </select><br><br>
+        Find widgets with the following properties:<br><br>
+        <form name="search" method="get" id="myform" action="/search" class="panel-body">
+            <div class="row">
+                <div class="form-group form-inline">
+                    <fieldset>
+                        <label>Text Filter</label>
+                        <input type="text" class="form-control" id="text" name="text" value="<%= query.text %>"
+                               placeholder="Text filter">
+                    </fieldset>
+                    <fieldset>
+                        <label>Widget Class</label>
+                        <select class="custom-select form-control" id="btnType" name="btnType">
+                            <% if (!btnTypeArr.includes(query.btnType)) { %>
+                            <option selected value="All">All</option>
+                            <% } else { %>
+                            <option value="All">All</option>
+                            <% }
+                            for (var i = 0; i < btnTypeArr.length; i++) {
+                                if (btnTypeArr[i] === 'All') {
+                                    continue;
+                                }
+                            if (query.btnType === btnTypeArr[i]) { %>
+                            <option selected> <%= btnTypeArr[i] %></option>
+                            <% }else { %>
+                            <option> <%= btnTypeArr[i] %></option>
+                            <% }
+                            } %>
+                        </select>
+                    </fieldset>
+                    <fieldset>
+                        <label>Color</label>
+                        <select class="custom-select form-control" id="color" name="color">
+                            <% if (!colArr.includes(query.color)) { %>
+                            <option selected value="All">All</option>
+                            <% } else { %>
+                            <option value="All">All</option>
+                            <% }
+                            for (var i = 0; i < colArr.length; i++) {
+                                if (colArr[i] === 'All') {
+                                    continue;
+                                }
+                            if (query.color === colArr[i]) { %>
+                            <option selected> <%= colArr[i] %></option>
+                            <% }else { %>
+                            <option> <%= colArr[i] %></option>
+                            <% }
+                            } %>
+                        </select>
+                    </fieldset>
+                    <fieldset>
+                        <label>Category</label>
+                        <select class="custom-select form-control" id="category" name="category">
+                            <% if (!catArr.includes(query.category)) { %>
+                            <option selected value="All">All</option>
+                            <% } else { %>
+                            <option value="All">All</option>
+                            <% }
+                            for (var i = 0; i < catArr.length; i++) {
+                                if (catArr[i] === 'All') {
+                                    continue;
+                                }
+                            if (query.category === catArr[i]) { %>
+                            <option selected> <%= catArr[i] %></option>
+                            <% }else { %>
+                            <option> <%= catArr[i] %></option>
+                            <% }
+                            } %>
+                        </select>
+                    </fieldset>
+                    <fieldset>
+                        <label>Sort By</label>
+                        <select class="custom-select form-control" id="sortType" name="sortType">
+                            <% if (!((query.sortType) in sortTypeDict)) { %>
+                            <option selected value="appDownloads"> <%= sortTypeDict['appDownloads'] %></option>
+                            <% } else { %>
+                            <option value="appDownloads"> <%= sortTypeDict['appDownloads'] %></option>
+                            <% } for (const [key, value] of Object.entries(sortTypeDict)) {
+                                if (key === 'appDownloads') {
+                                    continue;
+                                }
 
-            <h4> Color </h4>
-            <select class="custom-select" id="color" name="color">
-                <% if (!colArr.includes(query.color)) { %>
-                <option selected value="All">All</option>
-                <% } else { %>
-                <option value="All">All</option>
-                <% }
-                for (var i = 0; i < colArr.length; i++) {
-                    if (colArr[i] === 'All') {
-                        continue;
-                    }
-                if (query.color === colArr[i]) { %>
-                <option selected> <%= colArr[i] %></option>
-                <% }else { %>
-                <option> <%= colArr[i] %></option>
-                <% }
-                } %>
-            </select><br><br>
+                            if (query.sortType === key) { %>
+                            <option selected value="<%= key %>"><%= value %></option>
+                            <% }else { %>
+                            <option value="<%= key %>"><%= value %></option>
+                            <% }
+                            } %>
+                        </select>
+                    </fieldset>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 col-xs-6">
+                    <div class="form-group">
+                        <label>Width</label>
+                        <input type="text" id="width-slider" name="width" value=""/>
+                    </div>
+                </div>
+                <div class="col-md-4 col-xs-6">
+                    <div class="form-group">
+                        <label>Height</label>
+                        <input type="text" id="height-slider" name="height" value=""/>
+                    </div>
+                </div>
+            </div>
 
-            <h4> Application Category </h4>
-            <select class="custom-select" id="category" name="category">
-                <% if (!catArr.includes(query.category)) { %>
-                <option selected value="All">All</option>
-                <% } else { %>
-                <option value="All">All</option>
-                <% }
-                for (var i = 0; i < catArr.length; i++) {
-                    if (catArr[i] === 'All') {
-                        continue;
-                    }
-                if (query.category === catArr[i]) { %>
-                <option selected> <%= catArr[i] %></option>
-                <% }else { %>
-                <option> <%= catArr[i] %></option>
-                <% }
-                } %>
-            </select><br><br>
-
-            <h4> Image Size </h4>
-            Wdith:
-            <input type="text" id="width-slider" name="width" value=""/>
-            Height:
-            <input type="text" id="height-slider" name="height" value=""/>
-            <br><br>
-
-            <h4> Text Filter </h4>
-            <input type="text" class="form-control" id="text" name="text" value="<%= query.text %>">
-            <br><br>
-
-            <h4> Sort By </h4>
-            <select class="custom-select" id="sortType" name="sortType">
-                <% if (!((query.sortType) in sortTypeDict)) { %>
-                <option selected value="appDownloads"> <%= sortTypeDict['appDownloads'] %></option>
-                <% } else { %>
-                <option value="appDownloads"> <%= sortTypeDict['appDownloads'] %></option>
-                <% } for (const [key, value] of Object.entries(sortTypeDict)) {
-                    if (key === 'appDownloads') {
-                        continue;
-                    }
-
-                if (query.sortType === key) { %>
-                <option selected value="<%= key %>"><%= value %></option>
-                <% }else { %>
-                <option value="<%= key %>"><%= value %></option>
-                <% }
-                } %>
-            </select><br><br>
 
             <input type="hidden" name="page" value="1">
 

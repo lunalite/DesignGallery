@@ -31,6 +31,10 @@ router.get('/', function (req, res, next) {
         findObj["$or"].push({name: 'clipping-' + id.Spinner[i]});
     }
     Widget.find(findObj).exec(function (err, doc) {
+        if (err) {
+            return next(err);
+        }
+
         let _widgets = {
             CheckBox: [],
             // EditText: [],
@@ -59,9 +63,6 @@ router.get('/', function (req, res, next) {
 
         }
 
-        if (err) {
-            return next(err);
-        }
         res.render('index', {
             title: 'Mobile UI Gallery - Homepage',
             url: req.originalUrl,
