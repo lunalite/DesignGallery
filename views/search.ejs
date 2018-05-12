@@ -256,7 +256,7 @@
             let timer;
             $(window).scroll(function () {
                 if (_mainPage) {
-                    if ($(window).scrollTop() == $(document).height() - $(window).height()) {
+                    if ($(window).scrollTop() >= ($(document).height() - $(window).height()) * 0.75) {
                         if (timer) {
                             window.clearTimeout(timer);
                         }
