@@ -96,7 +96,7 @@ router.post('/', function (req, res, next) {
         switch (req.body.sortType) {
             case 'appDownloads':
                 _sortType = {
-                    downloads: 1,
+                    downloads: -1,
                     color: 1
                 };
                 break;
