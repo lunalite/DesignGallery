@@ -311,7 +311,7 @@
         html += '</tr>';
         html += '<tr>';
         html += '<td><b>Text: </b></td>';
-        html += '<td><%= widgets[i].text %></td>';
+        html += '<td><%= widgets[i].text.replace('\n', '\\n') %></td>';
         html += '</tr>';
         html += '<tr>';
         html += '<td><b>Class: </b></td>';
