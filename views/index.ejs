@@ -98,10 +98,19 @@
                 <div class="modal-body row">
                     <div class="col-md-5">
                         <div id="highlight-box"></div>
-                        <% var screenSrc = widgets[chosenArr[j]][i].src.split('/') %>
-                        <a href="./search/<%= widgets[chosenArr[j]][i].package_name%>/<%= screenSrc[7] %>">
+                        <% let screenSrc = widgets[chosenArr[j]][i].src.split('/')
+                            let urlAdd = '', similarAdd = '';
+                            if (screenSrc[1] === 'mnt') {
+                                urlAdd = screenSrc[3] + '/' + screenSrc[4] + '/' + screenSrc[7]
+                                similarAdd = screenSrc[7]
+                            } else if (screenSrc[0] === 'play_store_screenshots') {
+                                urlAdd = widgets[chosenArr[j]][i].src;
+                                similarAdd = screenSrc[-1];
+                            }
+                        %>
+                        <a href="./search/<%= widgets[chosenArr[j]][i].package_name %>/<%= similarAdd %>">
                             <img class="image--large"
-                                 src="https://storage.googleapis.com/ui-collection-gcs/<%= screenSrc[3] + '/' + screenSrc[4] + '/' + screenSrc[7] + '.jpeg' %>"
+                                 src="https://storage.googleapis.com/ui-collection-gcs/<%= urlAdd %>.jpeg"
                                  style="max-height:640px"/>
                         </a>
                     </div>

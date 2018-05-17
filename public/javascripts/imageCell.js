@@ -96,8 +96,16 @@ function loadImages(_page) {
                     html += '<div id="highlight-box">';
                     html += '</div>';
                     let screenSrc = widgets[i].src.split('/');
-                    html += '<a href="./search/' + widgets[i].package_name + '/' + screenSrc[7] + '">';
-                    html += '<img class="image--large" src="https://storage.googleapis.com/ui-collection-gcs/' + screenSrc[3] + '/' + screenSrc[4] + '/' + screenSrc[7] + '.jpeg" style="max-height:640px"/></a>';
+                    let urlAdd = '', similarAdd = '';
+                    if (screenSrc[1] === 'mnt') {
+                        urlAdd = screenSrc[3] + '/' + screenSrc[4] + '/' + screenSrc[7];
+                        similarAdd = screenSrc[7];
+                    } else if (screenSrc[0] === 'play_store_screenshots') {
+                        urlAdd = widgets[i].src;
+                        similarAdd = screenSrc[1];
+                    }
+                    html += '<a href="./search/' + widgets[i].package_name + '/' + similarAdd + '">';
+                    html += '<img class="image--large" src="https://storage.googleapis.com/ui-collection-gcs/' + urlAdd + '.jpeg" style="max-height:640px"/></a>';
                     html += '</div>';
                     html += '<div class="col-md-5 align-self-center">';
                     html += '<table cellpadding="0" cellspacing="0" border="0" class="app-detail">';
