@@ -61,8 +61,8 @@ router.post('/', function (req, res, next) {
         if (req.body.btnType === 'All') {
             findObj = {};
         } else {
-            // findObj.widget_class = new RegExp(req.body.btnType + '\\d?');
-            findObj.widget_class = req.body.btnType;
+            findObj.widget_class = new RegExp(req.body.btnType + '\\d?');
+            // findObj.widget_class = req.body.btnType;
         }
         if (req.body.color !== 'All') {
 
@@ -96,7 +96,7 @@ router.post('/', function (req, res, next) {
         switch (req.body.sortType) {
             case 'appDownloads':
                 _sortType = {
-                    downloads: -1,
+                    downloads: 1,
                     color: 1
                 };
                 break;

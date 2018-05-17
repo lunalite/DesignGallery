@@ -1,3 +1,26 @@
+function getMeta(url, _thisCell, _coordRes, _widRes) {
+    let img = new Image();
+    img.onload = function () {
+        let width = _thisCell.find('.image--large')[0].clientWidth;
+        let ratio = width / this.width;
+        let _left = parseInt(_coordRes[1]) * ratio + 10;
+        let _top = parseInt(_coordRes[2]) * ratio - 5;
+        let _height = parseInt(_widRes[2]) * ratio;
+        let _width = parseInt(_widRes[1]) * ratio;
+
+        let styles = {
+            position: 'absolute',
+            left: _left,
+            top: _top,
+            width: _width,
+            height: _height,
+            border: "5px solid red"
+        };
+        _thisCell.find('#highlight-box').css(styles)
+    };
+    img.src = url;
+}
+
 function addCall() {
     let $cell = $('.image__cell');
 
@@ -14,23 +37,10 @@ function addCall() {
             let widSize = $thisCell.find('.widSize').html();
             let widReg = /(\d+)x(\d+)/g;
             let widRes = widReg.exec(widSize);
+            let imageUrl = $thisCell.find('.image--expand img').attr('src');
 
-            let width = $thisCell.find('.image--large')[0].clientWidth;
-            let ratio = width / 800;
-            let _left = parseInt(coordRes[1]) * ratio + 10;
-            let _top = parseInt(coordRes[2]) * ratio - 5;
-            let _height = parseInt(widRes[2]) * ratio;
-            let _width = parseInt(widRes[1]) * ratio;
-
-            let styles = {
-                position: 'absolute',
-                left: _left,
-                top: _top,
-                width: _width,
-                height: _height,
-                border: "5px solid red"
-            };
-            $thisCell.find('#highlight-box').css(styles)
+            console.log('getMeta');
+            getMeta(imageUrl, $thisCell, coordRes, widRes);
         } else {
             $thisCell.removeClass('is-expanded').addClass('is-collapsed');
         }
@@ -96,7 +106,7 @@ function loadImages(_page) {
                     html += '<div id="highlight-box">';
                     html += '</div>';
                     let screenSrc = widgets[i].src.split('/');
-                    let urlAdd = '', similarAdd = '';
+                    var urlAdd = '', similarAdd = '';
                     if (screenSrc[1] === 'mnt') {
                         urlAdd = screenSrc[3] + '/' + screenSrc[4] + '/' + screenSrc[7];
                         similarAdd = screenSrc[7];
@@ -160,7 +170,7 @@ function loadImages(_page) {
 
                 }
                 $(".image-grid").append(html);    // This will be the div where our content will be loaded
-                addCall(_page);
+                addCall();
             }
         }
     });
